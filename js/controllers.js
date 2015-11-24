@@ -46,10 +46,11 @@ controller('projectsController', function($scope, $http, APIservice) {
   $scope.projectsList = [];
   $scope.disable = false;
 
-
+  var a =  APIservice.getProjects().response1;
+  console.log(a);
   APIservice.getProjects().success(function (response) {
+    console.log("@" + response);
     $scope.projectsList = response.QueryResult.Results;
-    console.log($scope.projectsList[0].Name);
   });
 }).
 
@@ -62,7 +63,7 @@ controller('projectController', function($scope, $routeParams, APIservice) {
        var keyword = new RegExp($scope.nameFilter, 'i');
        return !$scope.nameFilter || keyword.test(defect._refObjectName) || keyword.test(defect.Owner._refObjectName );
     };
-  APIservice.getDefects($scope.id).success(function (response) {
+  APIservice.getDefectsForId($scope.id).success(function (response) {
     $scope.defectsList = response.QueryResult.Results;
   });
 
