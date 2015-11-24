@@ -45,7 +45,7 @@ angular.module('DefectsApp.services', []).
     API.getDefectsForId = function(id) {
       return $http({
         method: 'JSONP', 
-        url: 'http://ergast.com/api/f1/2013/drivers/'+ id +'/driverStandings.json?callback=JSON_CALLBACK'
+        url: 'https://rally1.rallydev.com/slm/webservice/v2.0/defects?query=(Project.ObjectID = '+id+')&pagesize=200&fetch=FormattedID,Owner&jsonp=JSON_CALLBACK'
       });
     }
 

@@ -10,21 +10,6 @@ controllers.controller('driversController', function($scope, APIservice) {
   });
 }).
 
-/* Driver controller */
-controller('driverController', function($scope, $routeParams, APIservice) {
-  $scope.id = $routeParams.id;
-  $scope.races = [];
-  $scope.driver = null;
-
-  APIservice.getDriverDetails($scope.id).success(function (response) {
-    $scope.driver = response.MRData.StandingsTable.StandingsLists[0].DriverStandings[0]; 
-  });
-
-  APIservice.getDriverRaces($scope.id).success(function (response) {
-    $scope.races = response.MRData.RaceTable.Races; 
-  }); 
-}).
-
 /* Defects controller */
 controller('defectsController', function($scope, APIservice) {
   $scope.defectsList = [];
@@ -61,10 +46,12 @@ controller('projectController', function($scope, $routeParams, APIservice) {
 
   $scope.searchFilter = function (defect) {
        var keyword = new RegExp($scope.nameFilter, 'i');
-       return !$scope.nameFilter || keyword.test(defect._refObjectName) || keyword.test(defect.Owner._refObjectName );
+       return !$scope.nameFilter || keyword.test(defect.Name) || keyword.test(defect.Owner.Name );
     };
   APIservice.getDefectsForId($scope.id).success(function (response) {
     $scope.defectsList = response.QueryResult.Results;
+        console.log("name" + $scope.defectsList[0].Owner.Name);
+
   });
 
 });

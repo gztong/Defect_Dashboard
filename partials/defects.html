@@ -9,13 +9,15 @@
 <tbody>
   <tr ng-repeat="defect in defectsList | filter: searchFilter">
     <td>{{$index + 1}}</td>
+    <td>{{ defect.FormattedID}}</td>
+
     <td>
 <!--       <img src="img/flags/{{defect.Driver.nationality}}.png" />
       <a href="#/drivers/{{driver.Driver.driverId}}"> -->
 	  	{{defect._refObjectName}}
 	  </a>
 	</td>
-    <td>{{defect.Owner._refObjectName}}</td>
+    <td>Name: {{defect.Owner._refObjectName}}</td>
   </tr>
 </tbody>
 </table>

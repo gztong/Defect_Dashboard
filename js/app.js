@@ -8,7 +8,7 @@ defectsApp.config(['$routeProvider', function($routeProvider){
 	$routeProvider.
 		when("/defects", {templateUrl: "partials/defects.html", controller: "defectsController"}).
 		when("/projects", {templateUrl: "partials/projects.html", controller: "projectsController"}).
-		when("/defects/:id", {templateUrl: "partials/defects.html", controller: "defectsController"}).
+		when("/defects/:id", {templateUrl: "partials/defects.html", controller: "projectController"}).
 		otherwise({redirectTo: '/projects'});
 }]);
 
