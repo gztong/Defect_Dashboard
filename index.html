@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Defects Status</title>
+</head>
+
+<body ng-app="DefectsApp" ng-controller="defectsController">
+	<div class="function-button"> 
+		<button type="submit" ng-click="addProjects()"> Submit </button> 
+	</div>
+
+	<ng-view></ng-view>
+
+
+	<script src="js/angular.min.js"></script>
+	<script src="js/angular-route.min.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/services.js"></script>
+	<script src="js/controllers.js"></script>
+
+<!-- 	<table>
+		<thead>
+			<tr><th colspan="4">Defects Status Dashboard</th></tr>
+		</thead>
+		<tbody>
+		<tr ng-repeat="defect in defectsList">
+				<td>{{$index + 1}}</td>
+				<td>
+      <img src="img/flags/{{defect.Driver.nationality}}.png" />
+	<a href="#/drivers/{{driver.Driver.driverId}}">
+					{{defect._refObjectName}}
+				</a>
+			</td>
+			<td>{{defect.Owner._refObjectName}}</td>
+		</tr>
+	</tbody>
+</table> -->
+
+</body>
+</html>
