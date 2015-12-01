@@ -64,6 +64,13 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
    $scope.defectsList = artifactsManager.buildArtifacts(result);
 
 
+   // artifactsManager.getRevisions($scope.defectsList);
+
+  artifactsManager.getRevisions($scope.defectsList).then(function(result){
+      $scope.LastRevisions = result;
+      console.log($scope.LastRevisions);
+  });
+
   });
 
   // artifactsManager.loadAllArtifacts($scope.id).then(function(artifacts){

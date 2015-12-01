@@ -84,15 +84,54 @@ angular.module('DefectsApp.manager', [])
 
         buildArtifacts: function(array){
         	var artifacts_Objects = [];
+
         	array.forEach(function(data){
 
         		var obj = {
         			FormattedID: data.FormattedID,
-        			Name: data._refObjectName
+        			Name: data._refObjectName,
+                    RevisionRef: data.RevisionHistory._ref,
+                    Owner: data.Owner
         		};
         		artifacts_Objects.push(obj);
-        	});
+        	}
+
+
+            );
+
+           // this.getRevisions(artifacts_Objects);
+
+
         	return artifacts_Objects;
+        },
+
+        getRevisions: function (array) {
+            var apiList = [];
+            var myPromise = $q.defer();
+            array.forEach(function(obj){
+                apiList.push( {'FormattedID':obj.FormattedID,
+                               'ref': obj.RevisionRef} );
+            });
+
+            return $q.all(apiList.map(function (item) {
+                return APIservice.getRevisions(item.ref);
+            }))
+            .then(function (results) {
+                var lastRevisions = [];
+                var resultObj = {};
+                results.forEach(function (val, i) {
+                  //  var jsonObj = JSON.parse(val.data);
+
+                    
+                    var time = val.data.QueryResult.Results[0].CreationDate;
+                    resultObj[apiList[i].FormattedID] = time;
+                    // apiList.keys.forEach(function(key){
+                    //     
+                    // });
+                });
+                myPromise.resolve(resultObj);
+                return myPromise.promise;      
+            });
         },
 
         test1: function(){
