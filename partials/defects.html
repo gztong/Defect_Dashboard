@@ -1,5 +1,5 @@
 <section id="main"> 
-<a href="#/projects"><- Back to Projects list</a>
+<a href="#/projects"> <- Back to Projects list</a>
 
 <input type="text" ng-model="nameFilter" placeholder="Search..."/>
 <table>
@@ -10,16 +10,16 @@
   <tr ng-repeat="defect in defectsList | filter: searchFilter">
     <td>{{$index + 1}}</td>
     <td>{{ defect.FormattedID}}</td>
-
     <td>
-<!--       <img src="img/flags/{{defect.Driver.nationality}}.png" />
-      <a href="#/drivers/{{driver.Driver.driverId}}"> -->
-	  	{{defect._refObjectName}}
-	  </a>
-	</td>
-    <td>Name: {{defect.Owner._refObjectName}}</td>
+	  	{{defect.Name}}
+	  </td>
+    <td>{{defect.Owner._refObjectName}}</td>
+    <td>aa{{LastRevisions[$index]}}</td>
   </tr>
 </tbody>
 </table>
 
 </section>
+
+<!--       <img src="img/flags/{{defect.Driver.nationality}}.png" />
+      <a href="#/drivers/{{driver.Driver.driverId}}"> -->

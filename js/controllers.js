@@ -20,7 +20,6 @@ controller('defectsController', function($scope, APIservice) {
     };
   APIservice.getDefects($scope.id).success(function (response) {
     $scope.defectsList = response.QueryResult.Results;
-    console.log($scope.defectsList[0]._refObjectName);
   });
 
 
@@ -31,27 +30,58 @@ controller('projectsController', function($scope, $http, APIservice) {
   $scope.projectsList = [];
   $scope.disable = false;
 
-  var a =  APIservice.getProjects().response1;
-  console.log(a);
   APIservice.getProjects().success(function (response) {
-    console.log("@" + response);
     $scope.projectsList = response.QueryResult.Results;
   });
 }).
 
 /* Project controller */
-controller('projectController', function($scope, $routeParams, APIservice) {
+controller('projectController' , function($scope, $routeParams, APIservice, artifactsManager) {
   $scope.id = $routeParams.id;
   $scope.defectsList = []; 
+  $scope.RevisionHistory = new Array();
+  $scope.LastRevisions = new Array();
 
   $scope.searchFilter = function (defect) {
        var keyword = new RegExp($scope.nameFilter, 'i');
-       return !$scope.nameFilter || keyword.test(defect.Name) || keyword.test(defect.Owner.Name );
+       return !$scope.nameFilter || keyword.test(defect._refObjectName);
     };
-  APIservice.getDefectsForId($scope.id).success(function (response) {
-    $scope.defectsList = response.QueryResult.Results;
-        console.log("name" + $scope.defectsList[0].Owner.Name);
+
+  // APIservice.getDefectsForId($scope.id).success(function (response) {
+  //   $scope.defectsList = response.QueryResult.Results;
+  //    getRevisions(response);
+  // });
+
+  artifactsManager.loadAllArtifacts($scope.id).then(
+    function(result){
+   // $scope.defectsList = result;
+    return result;
+    },
+    function(error){
+      console.log(error.statusText);
+    }
+  ).then(function(result){
+   $scope.defectsList = artifactsManager.buildArtifacts(result);
+
 
   });
+
+  // artifactsManager.loadAllArtifacts($scope.id).then(function(artifacts){
+  //     $scope.defectsList = artifacts;
+  // });
+
+
+
+  var getRevisions = function(response){
+    for(var i=0; i < $scope.defectsList.length; i++){
+      $scope.RevisionHistory[i] = response.QueryResult.Results[i].RevisionHistory._ref;
+        APIservice.getRevisions( $scope.RevisionHistory[i] ).success(function (response1){
+          //console.log(response1.QueryResult.Results[0].Description);
+          $scope.LastRevisions[i] = response1.QueryResult.Results[0].CreationDate;
+          // console.log($scope.LastRevisions[$scope.defectsList[i].FormattedID]);
+         // console.log($scope.LastRevisions[i]);
+        });  
+    }
+  }
 
 });

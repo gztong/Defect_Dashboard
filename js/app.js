@@ -1,6 +1,7 @@
 var defectsApp = angular.module('DefectsApp', [
   'DefectsApp.controllers',
   'DefectsApp.services',
+  'DefectsApp.manager',
   'ngRoute'
 ]);
 
@@ -22,3 +23,4 @@ defectsApp.run( ['$http', function ($http){
 	}
 
 }]);
+

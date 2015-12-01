@@ -45,7 +45,8 @@ angular.module('DefectsApp.services', []).
     API.getDefectsForId = function(id) {
       return $http({
         method: 'JSONP', 
-        url: 'https://rally1.rallydev.com/slm/webservice/v2.0/defects?query=(Project.ObjectID = '+id+')&pagesize=200&fetch=FormattedID,Owner&jsonp=JSON_CALLBACK'
+        // sample: https://rally1.rallydev.com/slm/webservice/v2.0/defects?query=(Project.ObjectID="6537932590")&pagesize=200&fetch=FormattedID,Owner&jsonp=JSON_CALLBACK
+        url: 'https://rally1.rallydev.com/slm/webservice/v2.0/defects?query=(Project.ObjectID = '+id+')&order=CreationDate desc&pagesize=20&fetch=FormattedID,Owner,RevisionHistory&jsonp=JSON_CALLBACK'
       });
     }
 
@@ -54,6 +55,15 @@ angular.module('DefectsApp.services', []).
         method: 'JSONP', 
         url: 'http://ergast.com/api/f1/2013/drivers/'+ id +'/results.json?callback=JSON_CALLBACK'
       });
+    }
+
+    API.getRevisions = function(ref){
+      return $http({
+        method: 'JSONP', 
+        // sample: https://rally1.rallydev.com/slm/webservice/v2.0/revisionhistory/425698796/revisions?jsonp=JSON_CALLBACK
+        url: ref+'/revisions?jsonp=JSON_CALLBACK'
+      });
+
     }
 
     return API;
