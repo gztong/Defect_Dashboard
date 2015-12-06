@@ -47,11 +47,11 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
       'Package': false,
       'Changeset': false
   };
-
+  $scope.nameFilter ={};
 
   $scope.searchFilter = function (defect) {
-       var keyword = new RegExp($scope.nameFilter, 'i');
-       return !$scope.nameFilter || keyword.test(defect.Name);
+       var keyword = new RegExp($scope.nameFilter.text, 'i');
+       return ($scope.nameFilter.text === undefined) || keyword.test(defect.Name);
     };
 
   artifactsManager.loadAllArtifacts($scope.id).then(
