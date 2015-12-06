@@ -4,18 +4,43 @@ angular.module('DefectsApp')
 		if (Data) {
 		    this.setData(Data);
 		}
-	// Some other initializations related to artifact
 	};
 
     Artifact.prototype = {
 	    setData: function(Data) {
 	        angular.extend(this, Data);
 	    },
-	   
 	}
 
 	return Artifact;
 });
+
+
+angular.module('DefectsApp')
+.factory('projectsManager',function projectsManager($http, $q, APIservice) {  
+    var projectsManager = {
+        getProjects: function() {
+            var deferred = $q.defer();
+            var scope = this;
+            APIservice.getProjects().
+                success(function(response) {
+                    var projects = [];
+                    response.QueryResult.Results.forEach(function(data){
+                        var project = data;
+                        projects.push(project);
+                    });
+                    deferred.resolve(projects);
+                })
+                .error(function(){
+                    deferred.reject();
+                });
+            return deferred.promise;
+        }
+    }
+
+    return projectsManager;
+});
+
 
 angular.module('DefectsApp.manager', [])
 .factory('artifactsManager',function artifactsManager ($http, $q, Artifact, APIservice) {  
@@ -63,15 +88,12 @@ angular.module('DefectsApp.manager', [])
         loadAllArtifacts: function(id) {
             var deferred = $q.defer();
             var scope = this;
-            APIservice.getDefectsForId(id).
+           // APIservice.getDefectsForId(id). TODO
+                APIservice.tempData().
 	            success(function(response) {
 		     		var artifacts = [];
 		     		response.QueryResult.Results.forEach(function(data){
-		     			//var artifact = scope._retrieveInstance(data.id, data);
 		     			var artifact = data;
-		     			//console.log(data);
-		     		//	artifact.Owner = data.Owner._refObjectName;
-		     			//????
 		     			artifacts.push(artifact);
 		     		});
 		     		deferred.resolve(artifacts);
@@ -94,10 +116,7 @@ angular.module('DefectsApp.manager', [])
                     Owner: data.Owner
         		};
         		artifacts_Objects.push(obj);
-        	}
-
-
-            );
+        	});
 
            // this.getRevisions(artifacts_Objects);
 
@@ -106,33 +125,48 @@ angular.module('DefectsApp.manager', [])
         },
 
         getRevisions: function (array) {
+            var count = 0;
             var apiList = [];
+            window.apiList = apiList;
             var myPromise = $q.defer();
             array.forEach(function(obj){
                 apiList.push( {'FormattedID':obj.FormattedID,
                                'ref': obj.RevisionRef} );
             });
-
             return $q.all(apiList.map(function (item) {
                 return APIservice.getRevisions(item.ref);
             }))
             .then(function (results) {
-                var lastRevisions = [];
-                var resultObj = {};
+                window.allRevisions = results;
                 results.forEach(function (val, i) {
-                  //  var jsonObj = JSON.parse(val.data);
+                   // var result = APIservice.filterRevisions(val.data.QueryResult.Results, patt);
+                    var result = val.data.QueryResult.Results[0];
+                    //var result = filter(val.data.QueryResult.Results, patt);
+                    var myDate = new Date(result.CreationDate);
 
-                    
-                    var time = val.data.QueryResult.Results[0].CreationDate;
-                    resultObj[apiList[i].FormattedID] = time;
-                    // apiList.keys.forEach(function(key){
-                    //     
-                    // });
+
+                    apiList[i].RevisionCreationDate = result.CreationDate;// myDate.toLocaleString();
+                    apiList[i].Revisiondesc =  result.Description;
                 });
-                myPromise.resolve(resultObj);
+                myPromise.resolve(apiList);
                 return myPromise.promise;      
             });
         },
+
+
+        sortBy: function(pattStr){
+            var patt = new RegExp(pattStr.toUpperCase());
+
+            window.allRevisions.forEach(function (val, i) {
+                var result = APIservice.filterRevisions(val.data.QueryResult.Results, patt);       
+                window.apiList[i].RevisionCreationDate =  result.CreationDate;
+                window.apiList[i].Revisiondesc =  result.Description;
+                console.log("ID: " +window.apiList[i].FormattedID +", Date: "+ window.apiList[i].RevisionCreationDate);
+            });
+
+            return window.apiList;
+        },
+        
 
         test1: function(){
         	console.log('test');

@@ -1,0 +1,28 @@
+body {
+  font: 100% Helvetica, sans-serif;
+  color: #334; }
+  body #main {
+    width: 90%;
+    margin: 0 auto; }
+  body .searchBar {
+    width: 30%;
+    margin-left: 10px;
+    float: right; }
+
+.toolBar {
+  margin: 10px; }
+  .toolBar .orderButton {
+    display: inline; }
+
+.toggled {
+  background-color: #0052cc !important;
+  color: white !important; }
+
+.mainTable {
+  td-border: 2px solid black; }
+  .mainTable .index {
+    color: red; }
+  .mainTable tr:nth-child(even) {
+    background-color: #CCC; }
+
+/*# sourceMappingURL=projects.css.map */

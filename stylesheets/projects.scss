@@ -1,0 +1,58 @@
+$font-stack:    Helvetica, sans-serif;
+$primary-color: #334;
+$row-color: #CCC;
+
+body {
+  font: 100% $font-stack;
+  color: $primary-color;
+  #main{
+  	width: 90%;
+ 	margin: 0 auto;
+  }
+  .searchBar{
+  	width: 30%;
+  	margin-left: 10px;
+  	float: right;
+  }
+}
+
+.toolBar{
+	margin: 10px;
+	.orderButton{
+		display: inline;
+	}
+
+}
+
+
+.toggled{
+	background-color: #0052cc !important;
+	color: white !important;
+}
+
+.mainTable {
+
+	thead {
+
+	}
+	.index {
+		color: red;
+	}
+
+
+	tr:nth-child(even){
+		background-color: $row-color;
+	}
+
+	td: {
+	    border: 2px solid black;
+
+	}
+
+
+}
+
+// .row{
+
+// 	background-color: 	background-color: $row-color;
+// }

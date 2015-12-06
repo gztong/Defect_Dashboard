@@ -1,23 +1,88 @@
 <section id="main"> 
-<a href="#/projects"> <- Back to Projects list</a>
+  <div class="header">
+    <a href="#/projects"> <- Back to Projects list</a>
+  </div>
 
-<input type="text" ng-model="nameFilter" placeholder="Search..."/>
-<table>
-<thead>
-  <tr><th colspan="4">Defects Status Dashboard</th></tr>
-</thead>
-<tbody>
-  <tr ng-repeat="defect in defectsList | filter: searchFilter">
-    <td>{{$index + 1}}</td>
-    <td>{{ defect.FormattedID}}</td>
-    <td>
-	  	{{defect.Name}}
-	  </td>
-    <td>{{defect.Owner._refObjectName}}</td>
-    <td>{{LastRevisions[defect.FormattedID]}}</td>
-  </tr>
-</tbody>
-</table>
+
+
+  <uib-tabset>
+  <uib-tab heading="News">
+  
+  <div class="news-content">
+    <div class = "toolBar"> 
+      <p class="orderButton" ng-repeat = "(key, value) in orderToggled">
+        <a class="btn btn-default" role="button" ng-click="toggle(key)" ng-class="{toggled : value}" >{{key}}</a>
+      </p>
+
+      <div class="searchBar">
+        <div class="input-group">
+          <input ng-model="nameFilter" type="text" class="form-control" placeholder="Search..." aria-describedby="basic-addon2">
+          <span class="input-group-addon" id="basic-addon2">Go</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!--  Table Content -->
+  <div class="mainTable"> 
+    <table>
+      <tbody>
+        <tr ng-repeat="defect in defectsList | filter:searchFilter | orderBy:'-RevisionCreationDate'" class="row">
+          <td class="index">{{$index + 1}}</td>
+          <td>{{ defect.FormattedID}}</td>
+          <td>
+            {{defect.Name}}
+          </td>
+          <td>{{defect.Owner._refObjectName}}</td>
+          <td>{{defect.RevisionCreationDate}}</td>
+          <td>{{defect.Revisiondesc}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</uib-tab>
+
+<uib-tab heading="Group">Static content</uib-tab>
+</uib-tabset>
+
+
+  <div class="news-content">
+    <div class = "toolBar"> 
+      <p class="orderButton" ng-repeat = "(key, value) in orderToggled">
+        <a class="btn btn-default" role="button" ng-click="toggle(key)" ng-class="{toggled : value}" >{{key}}</a>
+      </p>
+
+      <div class="searchBar">
+        <div class="input-group">
+          <input ng-model="nameFilter" type="text" class="form-control" placeholder="Search..." aria-describedby="basic-addon2">
+          <span class="input-group-addon" id="basic-addon2">Go</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!--  Table Content -->
+  <div class="mainTable"> 
+    <table>
+      <tbody>
+        <tr ng-repeat="defect in defectsList | filter:searchFilter | orderBy:'-RevisionCreationDate'" class="row">
+          <td class="index">{{$index + 1}}</td>
+          <td>{{ defect.FormattedID}}</td>
+          <td>
+            {{defect.Name}}
+          </td>
+          <td>{{defect.Owner._refObjectName}}</td>
+          <td>{{defect.RevisionCreationDate}}</td>
+          <td>{{defect.Revisiondesc}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+
 
 </section>
 

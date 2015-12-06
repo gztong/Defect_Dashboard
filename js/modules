@@ -1,3 +1,0 @@
-angular.module('DefectsApp.modules', []).
-
-factory('Book', ['$http', function($http) {  

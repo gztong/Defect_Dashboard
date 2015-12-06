@@ -1,9 +1,12 @@
 var defectsApp = angular.module('DefectsApp', [
+  'ui.bootstrap',
   'DefectsApp.controllers',
   'DefectsApp.services',
   'DefectsApp.manager',
   'ngRoute'
 ]);
+
+angular.module('myModule', ['ui.bootstrap']);
 
 defectsApp.config(['$routeProvider', function($routeProvider){	
 	$routeProvider.
