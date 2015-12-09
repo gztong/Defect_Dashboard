@@ -47,32 +47,55 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
       'Resolution': false
   };
   $scope.propertyFilter = {
-  	'State': ['Open', 'Submitted'],
-  	'Severity': ['Cosmetic Problem (Class 2)']
+ // 	'State': ['Open', 'Submitted']
+//'Severity': ['Cosmetic Problem (Class 2)']
   };
 
   $scope.nameFilter ={};
   $scope.pool = {};
 
-  $scope.searchFilter = function (defect) {
-  		// $scope.groupDict2[State] contains defect
+  $scope.searchFilter = function(defect){
+  	var keyword = new RegExp($scope.nameFilter.text, 'i');
+  	return ($scope.nameFilter.text === undefined) 
+  	|| keyword.test(defect.Name) 
+  	|| keyword.test(defect.Severity)
+  	|| keyword.test(defect.State);
+  };
 
-  		// for( key in $scope.propertyFilter){
-  		// 	var value = $scope.propertyFilter[key];
-  		// 	console.log(value);
-  		// }
+  $scope.groupFilter = function(defect){
+  	for(var key in $scope.propertyFilter){
+  		if( $scope.propertyFilter[key].indexOf( defect[key]) >= 0 ){
+  			continue;
+  		}else{
+  			return false;
+  		}
+  	}
+
+  	return true;
+  };
 
 
-       var keyword = new RegExp($scope.nameFilter.text, 'i');
+  $scope.addFilter = function(key, option){
+  	if(	$scope.propertyFilter[key] === undefined){
+  		$scope.propertyFilter[key] = [];
+  	}
 
-       var filterResult = true;
+  	var index = $scope.propertyFilter[key].indexOf(option);
 
-       return  (($scope.nameFilter.text === undefined) 
-       || keyword.test(defect.Name) 
-       || keyword.test(defect.Severity)
-       || keyword.test(defect.State))
-       && filterResult;
-    };
+  	if(index < 0){
+  		$scope.propertyFilter[key].push(option);
+  	}else{
+  		$scope.propertyFilter[key] = $scope.propertyFilter[key].splice(index+1, 1);
+  		if( $scope.propertyFilter[key].length ===0 ){
+  			delete $scope.propertyFilter[key];
+  		} 
+  	}
+
+  	console.log($scope.propertyFilter);
+  	
+  }
+
+
 
   artifactsManager.loadAllArtifacts($scope.id).then(
     function(result){

@@ -56,7 +56,7 @@
       <div class= "property-container container-fluid list-group" ng-repeat= "(key, value) in pool.property">
         <div class="property list-group-item list-group-item-info" ng-click="groupBy(key)">{{key}}<span class="badge">{{groupDict2[key].length}}</span></div>
 
-        <div class="option list-group-item" ng-repeat="option in value">{{option}}</div>
+        <div class="option list-group-item" ng-repeat="option in value" ng-click="addFilter(key, option) " ng-class="{active: propertyFilter[key].indexOf(option) > -1 }">{{option}}</div>
         </div>
     </div>
   </div>
@@ -67,7 +67,7 @@
         <tr colspan="4">
           <th> {{key}} </th>
         </tr>
-        <tr ng-repeat="defect in item | filter: searchFilter" ng-class="{strike: defect.Gone}">
+        <tr ng-repeat="defect in item | filter: searchFilter | filter: groupFilter" ng-class="{strike: defect.Gone}">
           <td class="index">{{$index + 1}}</td>
           <td>{{ defect.FormattedID}}</td>
           <td>
@@ -76,6 +76,7 @@
           </td>
           <td>{{defect.Owner._refObjectName}}</td>
           <td>{{defect.State}}</td>
+          <td>{{defect.Severity}}</td>
         </tr>
       </tbody>
     </table>
