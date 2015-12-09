@@ -1,6 +1,7 @@
 $font-stack:    Helvetica, sans-serif;
 $primary-color: #334;
 $row-color: #CCC;
+$grey-text: #DDD;
 
 body {
   font: 100% $font-stack;
@@ -9,7 +10,7 @@ body {
   	width: 90%;
  	margin: 0 auto;
   }
-  .searchBar{
+  .search{
   	width: 30%;
   	margin-left: 10px;
   	float: right;
@@ -21,6 +22,14 @@ body {
 	.orderButton{
 		display: inline;
 	}
+	.container-fluid{
+		float: left;
+  		width: 200px;
+		display: inline;
+	}
+	.option{
+		
+	}
 
 }
 
@@ -28,6 +37,10 @@ body {
 .toggled{
 	background-color: #0052cc !important;
 	color: white !important;
+}
+.strike {
+    text-decoration: line-through;
+    color: $grey-text !important;
 }
 
 .mainTable {

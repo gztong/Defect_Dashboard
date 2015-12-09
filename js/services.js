@@ -6,7 +6,7 @@ angular.module('DefectsApp.services', []).
     API.getProjects = function(){
       return $http({
         method: 'JSONP',
-        url: 'https://rally1.rallydev.com/slm/webservice/v2.0/projects?query=(Name contains "AIM")&pagesize=200&fetch=ObjectID&jsonp=JSON_CALLBACK'
+        url: 'https://rally1.rallydev.com/slm/webservice/v2.0/projects?query=(Name contains "AIM")&pagesize=50&fetch=ObjectID&jsonp=JSON_CALLBACK'
       });
     }
 
@@ -32,8 +32,8 @@ angular.module('DefectsApp.services', []).
     API.getDefectsForId = function(id) {
       return $http({
         method: 'JSONP', 
-        // sample: https://rally1.rallydev.com/slm/webservice/v2.0/defects?query=(Project.ObjectID="6537932590")&pagesize=200&fetch=FormattedID,Owner&jsonp=JSON_CALLBACK
-        url: 'https://rally1.rallydev.com/slm/webservice/v2.0/defects?query=(Project.ObjectID = '+id+')&order=CreationDate desc&pagesize=100&fetch=FormattedID,Owner,RevisionHistory&jsonp=JSON_CALLBACK'
+        // sample: https://rally1.rallydev.com/slm/webservice/v2.0/defects?query=(Project.ObjectID%20=%206537932590)&order=CreationDate%20desc&pagesize=10&fetch=State,FormattedID,Owner,RevisionHistory
+        url: 'https://rally1.rallydev.com/slm/webservice/v2.0/defects?query=(Project.ObjectID = '+id+')&order=CreationDate desc&pagesize=30&fetch=Priority,Severity,State,ObjectID,FormattedID,Owner,RevisionHistory&jsonp=JSON_CALLBACK'
       });
     }
 
@@ -76,10 +76,7 @@ angular.module('DefectsApp.services', []).
    // arr1: all elements
    // arr2 : filtered elements
     API.mergeArrays = function(arr1, arr2){
-     
     //  arr1.sort(dynamicSort('FormattedID'));
-     // arr2.sort(dynamicSort('FormattedID'));
-
       for (var i=0; i< arr1.length; i++){
         if (arr2[i].FormattedID === arr1[i].FormattedID){
             $.extend( arr1[i], arr2[i] );
@@ -91,15 +88,108 @@ angular.module('DefectsApp.services', []).
     }
 
     function dynamicSort(property) {
-    var sortOrder = 1;
-    if(property[0] === "-") {
-        sortOrder = -1;
-        property = property.substr(1);
-    }
-    return function (a,b) {
-        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-        return result * sortOrder;
-    }
-}
+	    var sortOrder = 1;
+	    if(property[0] === "-") {
+	        sortOrder = -1;
+	        property = property.substr(1);
+	    }
+	    return function (a,b) {
+	        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+	        return result * sortOrder;
+	    }
+	}
+
+	API.groupByDay = function(arr){
+		arr.sort(dynamicSort('-RevisionCreationDate'));
+		var groups = {};
+		var weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+		for(var i=0; i< arr.length; i++){
+			var d = new Date(arr[i].RevisionCreationDate);
+			var oneWeekAgo = new Date();
+			oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+			// Break, if RevisionCreationDate is two weeks ago
+			if( d.getTime() < oneWeekAgo.getTime() ) break; 
+
+			if (groups[weekday[d.getDay()]] === undefined ){
+				groups[weekday[d.getDay()]] = [];
+			}
+			groups[weekday[d.getDay()]].push(arr[i]);
+		}
+
+		return groups;
+	}
+
+	API.getPropertyPool = function(arr){
+		var keys = Object.keys(arr[0]);
+		keys = ['State', 'Severity', 'Owner'];
+		var pool = {};
+		for(var i=0; i<arr.length; i++){
+			for(var j=0; j<keys.length; j++){
+				if( pool[keys[j]] === undefined ){
+					pool[keys[j]] = [];
+				}
+
+
+				if( keys[j] === 'Owner'){
+					if(arr[i]['Owner'] !== null && pool['Owner'].indexOf(arr[i]['Owner']._refObjectName) < 0){
+						pool['Owner'].push(arr[i]['Owner']._refObjectName);
+					}else if ( pool['Owner'].indexOf('No Owner' ) < 0){
+						pool['Owner'].push('No Owner');
+					}
+				}else if( pool[keys[j]].indexOf(arr[i][keys[j]]) < 0) {
+					pool[keys[j]].push(arr[i][keys[j]]);
+				}
+
+
+				// if( pool[keys[j]].indexOf(arr[i][keys[j]]) < 0){
+				// 	if( keys[j] === 'Owner'){
+				// 		if(arr[i]['Owner'] !== null ){
+				// 			pool[keys[j]].push(arr[i][keys[j]]._refObjectName);
+				// 		}else{
+				// 			pool[keys[j]].push('No Owner');
+				// 		}
+				// 	}else{
+				// 		pool[keys[j]].push(arr[i][keys[j]]);
+				// 	}
+				// }
+			}
+		}
+		console.log(pool);
+		return pool;
+	}
+
+	API.groupBy = function(arr, property, pool){
+
+
+		var groups = {};
+		var keys = pool[property];
+
+		if(property === 'Owner'){
+			for(var i=0; i< arr.length; i++){
+
+				if ( arr[i][property] === null){
+					arr[i][property] = {};
+					arr[i][property]._refObjectName = 'No Owner';
+				} 
+
+				if (groups[arr[i][property]._refObjectName] === undefined ){
+					groups[arr[i][property]._refObjectName] = [];
+				}
+				groups[arr[i][property]._refObjectName].push(arr[i]);
+			}
+			return groups;
+		}
+
+		for(var i=0; i< arr.length; i++){			
+			if (groups[arr[i][property]] === undefined ){
+				groups[arr[i][property]] = [];
+			}
+			groups[arr[i][property]].push(arr[i]);
+		}
+		return groups;
+	}
+
+
     return API;
   });

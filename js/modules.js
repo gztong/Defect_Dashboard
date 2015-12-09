@@ -88,12 +88,13 @@ angular.module('DefectsApp.manager', [])
         loadAllArtifacts: function(id) {
             var deferred = $q.defer();
             var scope = this;
-           // APIservice.getDefectsForId(id). TODO
-                APIservice.tempData().
+            APIservice.getDefectsForId(id).
+                //APIservice.tempData().
 	            success(function(response) {
 		     		var artifacts = [];
 		     		response.QueryResult.Results.forEach(function(data){
 		     			var artifact = data;
+		     			artifact.projectID = id;
 		     			artifacts.push(artifact);
 		     		});
 		     		deferred.resolve(artifacts);
@@ -108,12 +109,18 @@ angular.module('DefectsApp.manager', [])
         	var artifacts_Objects = [];
 
         	array.forEach(function(data){
-
+        		var id = data._ref.substr(data._ref.lastIndexOf('/') + 1); //48046560864
         		var obj = {
         			FormattedID: data.FormattedID,
         			Name: data._refObjectName,
                     RevisionRef: data.RevisionHistory._ref,
-                    Owner: data.Owner
+                    Owner: data.Owner,
+                    //OwnerName: data.Owner._refObjectName,  ???
+                    //https://rally1.rallydev.com/#/6537932590/detail/defect/48046560864
+                    Url: 'https://rally1.rallydev.com/#/'+ data.projectID+ '/detail/defect/'+ id,
+                    State: data.State,
+                    Gone: data.State==="Fixed/Resolved"|| data.State==="Closed",
+                    Severity: data.Severity
         		};
         		artifacts_Objects.push(obj);
         	});
@@ -137,16 +144,18 @@ angular.module('DefectsApp.manager', [])
                 return APIservice.getRevisions(item.ref);
             }))
             .then(function (results) {
-                window.allRevisions = results;
+              //  window.allRevisions = results;
                 results.forEach(function (val, i) {
-                   // var result = APIservice.filterRevisions(val.data.QueryResult.Results, patt);
                     var result = val.data.QueryResult.Results[0];
-                    //var result = filter(val.data.QueryResult.Results, patt);
+                    var revisions = val.data.QueryResult.Results;
+
                     var myDate = new Date(result.CreationDate);
 
-
                     apiList[i].RevisionCreationDate = result.CreationDate;// myDate.toLocaleString();
+                    var d = new Date(result.CreationDate);
+                    apiList[i].RevisionCreationDateFormatted = d.toLocaleString();
                     apiList[i].Revisiondesc =  result.Description;
+                    apiList[i].Revisions = revisions;
                 });
                 myPromise.resolve(apiList);
                 return myPromise.promise;      
@@ -154,17 +163,22 @@ angular.module('DefectsApp.manager', [])
         },
 
 
-        sortBy: function(pattStr){
+        sortBy: function(pattStr, arr){
             var patt = new RegExp(pattStr.toUpperCase());
+            console.log(arr);
+            arr.forEach(function (val, i) {
+                //var result = APIservice.filterRevisions(val.data.QueryResult.Results, patt);  
+                var result = APIservice.filterRevisions(val.Revisions, patt);  
+                val.RevisionCreationDate = result.CreationDate;
+                val.Revisiondesc = result.Description;
 
-            window.allRevisions.forEach(function (val, i) {
-                var result = APIservice.filterRevisions(val.data.QueryResult.Results, patt);       
-                window.apiList[i].RevisionCreationDate =  result.CreationDate;
-                window.apiList[i].Revisiondesc =  result.Description;
-                console.log("ID: " +window.apiList[i].FormattedID +", Date: "+ window.apiList[i].RevisionCreationDate);
+
+               // window.apiList[i].RevisionCreationDate =  result.CreationDate;
+               // window.apiList[i].Revisiondesc =  result.Description;
+              //  console.log("ID: " +window.apiList[i].FormattedID +", Date: "+ window.apiList[i].RevisionCreationDate);
             });
 
-            return window.apiList;
+            return arr;
         },
         
 

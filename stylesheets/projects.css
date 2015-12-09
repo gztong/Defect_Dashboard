@@ -4,7 +4,7 @@ body {
   body #main {
     width: 90%;
     margin: 0 auto; }
-  body .searchBar {
+  body .search {
     width: 30%;
     margin-left: 10px;
     float: right; }
@@ -13,10 +13,18 @@ body {
   margin: 10px; }
   .toolBar .orderButton {
     display: inline; }
+  .toolBar .container-fluid {
+    float: left;
+    width: 200px;
+    display: inline; }
 
 .toggled {
   background-color: #0052cc !important;
   color: white !important; }
+
+.strike {
+  text-decoration: line-through;
+  color: #DDD !important; }
 
 .mainTable {
   td-border: 2px solid black; }

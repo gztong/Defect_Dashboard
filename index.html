@@ -27,26 +27,39 @@
 	<ng-view></ng-view>
 
 
-
-
-
-<!-- 	<table>
-		<thead>
-			<tr><th colspan="4">Defects Status Dashboard</th></tr>
-		</thead>
-		<tbody>
-		<tr ng-repeat="defect in defectsList">
-				<td>{{$index + 1}}</td>
-				<td>
-      <img src="img/flags/{{defect.Driver.nationality}}.png" />
-	<a href="#/drivers/{{driver.Driver.driverId}}">
-					{{defect._refObjectName}}
-				</a>
-			</td>
-			<td>{{defect.Owner._refObjectName}}</td>
-		</tr>
-	</tbody>
-</table> -->
-
 </body>
+
+<script type="text/javascript">
+
+
+  $(document).ready(function() {
+
+    $(".testButton").click(function(){
+     console.log('test clicked');
+   });  
+
+    click = function(){
+      console.log('test clicked');
+
+    }
+
+    $(".testButton").on("click", function(event){
+      console.log('clicked');
+    });
+
+    $("li.groupOption").click(function() {
+      console.log("toggled");
+
+      $(this).toggle( "slow", function() {
+        console.log("toggled");
+        $(this).addClass( "active" );
+      });
+      
+    });
+
+  });
+
+</script>
 </html>
+
+
