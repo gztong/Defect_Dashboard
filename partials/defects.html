@@ -55,13 +55,14 @@
     <div class="filter-container">
       <div class= "property-container container-fluid list-group" ng-repeat= "(key, value) in pool.property">
         <div class="property list-group-item list-group-item-info" ng-click="groupBy(key)">{{key}}<span class="badge">{{groupDict2[key].length}}</span></div>
-
-        <div class="option list-group-item" ng-repeat="option in value" ng-click="addFilter(key, option) " ng-class="{active: propertyFilter[key].indexOf(option) > -1 }">{{option}}</div>
+        <div class="option list-group-item" ng-repeat="option in value" ng-click="addFilter(key, option) " ng-class="{'active': propertyFilter[key].indexOf(option)> -1, 'hide': hide_filter, 'show': !hide_filter}">{{option}}</div>
         </div>
+        <button class="btn btn-default" ng-click="toggle_filter()"> {{hideButtonText}} </button>
+        
     </div>
   </div>
 <!--  end toolbar -->
-
+  <div class="table-container">
     <table class="table table-hover">
       <tbody ng-repeat="(key, item) in groupDict2">
         <tr colspan="4">
@@ -74,16 +75,23 @@
             <a href={{defect.Url}} target="_blank"> {{defect.Name}} </a>
            
           </td>
-          <td>{{defect.Owner._refObjectName}}</td>
-          <td>{{defect.State}}</td>
+          <td>{{defect.OwnerName}}</td>
           <td>{{defect.Severity}}</td>
+          <td class="tags">
+            <span ng-repeat="tag in defect.Tags" class="label" ng-class="getLabelClass(tag)">
+             {{tag}}
+            </span>
+          </td>
         </tr>
       </tbody>
     </table>
-    <!-- end Table Content -->
-
-
+  </div>
+    <!-- end Table Container -->
 </uib-tab>
+<!-- end group section -->
+
+
+
 
 <div class="search">
   <div class="input-group">
@@ -91,7 +99,7 @@
     <span class="input-group-addon" id="basic-addon2">Go</span>
   </div>
 </div>
-
+<!-- end nav bar -->
 
 </uib-tabset>
 

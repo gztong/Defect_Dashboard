@@ -114,13 +114,17 @@ angular.module('DefectsApp.manager', [])
         			FormattedID: data.FormattedID,
         			Name: data._refObjectName,
                     RevisionRef: data.RevisionHistory._ref,
-                    Owner: data.Owner,
+                    tags_Ref: data._ref + '/Tags',
+                    OwnerName: data.Owner ? data.Owner._refObjectName: 'No Owner',
+                  //  Owner: data.Owner,
+                    Tags: [],
                     //OwnerName: data.Owner._refObjectName,  ???
                     //https://rally1.rallydev.com/#/6537932590/detail/defect/48046560864
                     Url: 'https://rally1.rallydev.com/#/'+ data.projectID+ '/detail/defect/'+ id,
                     State: data.State,
                     Gone: data.State==="Fixed/Resolved"|| data.State==="Closed",
-                    Severity: data.Severity
+                    Severity: data.Severity,
+                    Priority: data.Priority
         		};
         		artifacts_Objects.push(obj);
         	});
@@ -162,6 +166,27 @@ angular.module('DefectsApp.manager', [])
             });
         },
 
+        getTags: function(array){
+        	 var myPromise = $q.defer();
+        	
+        	return $q.all(array.map(function(item){
+        		return APIservice.getTags(item.tags_Ref);
+        	}))
+        	.then(function(results){
+
+				results.forEach(function(val, i){
+					var tags = val.data.QueryResult.Results;
+	    			array[i].Tags  = [];
+	    			tags.forEach(function(tag){
+	    				array[i].Tags .push(tag.Name);
+	    			});
+				});
+
+        		myPromise.resolve(array);
+        		return myPromise.promise;
+        	});
+
+        },
 
         sortBy: function(pattStr, arr){
             var patt = new RegExp(pattStr.toUpperCase());

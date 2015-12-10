@@ -32,13 +32,16 @@ controller('projectsController', function($scope, $http, APIservice, projectsMan
 
 /* Project controller */
 controller('projectController' , function($scope, $routeParams, APIservice, artifactsManager) {
+  // $('[data-toggle="tooltip"]').tooltip(); 
   $scope.id = $routeParams.id;
   $scope.basicList = [];
   $scope.defectsList = []; 
   $scope.groupDict = {};
   $scope.groupDict2 = {};
-  $scope.RevisionHistory = new Array();
-  $scope.LastRevisions = new Array();
+  $scope.RevisionHistory = [];
+  $scope.LastRevisions = [];
+  $scope.hide_filter = true;
+  $scope.hideButtonText = "Show";
   $scope.orderToggled = {
       'Owner': false,
       'Tags': false,
@@ -46,28 +49,57 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
       'Changeset': false,
       'Resolution': false
   };
-  $scope.propertyFilter = {
- // 	'State': ['Open', 'Submitted']
-//'Severity': ['Cosmetic Problem (Class 2)']
-  };
-
+  $scope.propertyFilter = {};
   $scope.nameFilter ={};
   $scope.pool = {};
+  $scope.getLabelClass = function(tag){
+  	var classes = ['label-primary', 'label-danger', 'label-success', 'label-info', 'label-warning'];
+  	var i = hashCode(tag) % 5;
+  	i = i>0 ? i: -i;
+  	return classes[i];
+  }
+  hashCode = function(s){
+ 	 return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);              
+  }
 
   $scope.searchFilter = function(defect){
   	var keyword = new RegExp($scope.nameFilter.text, 'i');
   	return ($scope.nameFilter.text === undefined) 
   	|| keyword.test(defect.Name) 
   	|| keyword.test(defect.Severity)
-  	|| keyword.test(defect.State);
+  	|| keyword.test(defect.State)
+  	|| keyword.test(defect.FormattedID)
+  	|| keyword.test(defect.OwnerName);
   };
 
   $scope.groupFilter = function(defect){
+
   	for(var key in $scope.propertyFilter){
-  		if( $scope.propertyFilter[key].indexOf( defect[key]) >= 0 ){
-  			continue;
+  		if(key === 'Owner'){	// 'Owner' needs to be treated specially 
+  			 //TODO
+  			// if( $scope.propertyFilter[key].indexOf( defect.Owner._refObjectName) >= 0 ){
+  			// 	continue;
+  			// }else{
+  			// 	return false;
+  			// }
+  		}else if(key === 'Tags'){
+  			if (defect['Tags'].length===0 && $scope.propertyFilter[key].indexOf('No Tags')<0){
+  				return false;
+  			} 
+
+  			for(var i=0; i<defect['Tags'].length; i++){
+  				if( $scope.propertyFilter[key].indexOf(defect['Tags'][i]) >= 0 ){
+  					continue;
+  				}else{
+  					return false;
+  				}
+  			}
   		}else{
-  			return false;
+  			if( $scope.propertyFilter[key].indexOf( defect[key]) >= 0 ){
+  				continue;
+  			}else{
+  				return false;
+  			}
   		}
   	}
 
@@ -79,7 +111,6 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
   	if(	$scope.propertyFilter[key] === undefined){
   		$scope.propertyFilter[key] = [];
   	}
-
   	var index = $scope.propertyFilter[key].indexOf(option);
 
   	if(index < 0){
@@ -90,16 +121,12 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
   			delete $scope.propertyFilter[key];
   		} 
   	}
-
-  	console.log($scope.propertyFilter);
-  	
   }
 
 
 
   artifactsManager.loadAllArtifacts($scope.id).then(
     function(result){
-   // $scope.defectsList = result;
     return result;
     },
     function(error){
@@ -107,7 +134,13 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
     }
   ).then(function(result){
    $scope.basicList = artifactsManager.buildArtifacts(result);
-   $scope.defectsList = $scope.basicList;
+
+   var listtest = artifactsManager.getTags($scope.basicList).then(function(result){
+   		var withTags = result;
+   		console.log(result);
+   });
+
+
     artifactsManager.getRevisions($scope.basicList).then(function(result){
         //$scope.LastRevisions = result;
         $scope.revisionsInfo = result; 
@@ -118,41 +151,46 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
         $scope.pool.property = APIservice.getPropertyPool($scope.defectsList);
 
         $scope.groupDict2 = APIservice.groupBy($scope.defectsList, 'State', $scope.pool.property  );
-
-
     }); 
 
 
-  $scope.sortRevisions = function(patt){
-    $scope.defectsList = artifactsManager.sortBy(patt, $scope.defectsList );
-    $scope.groupDict = APIservice.groupByDay($scope.defectsList);
-  };
 
-  $scope.toggle = function(type){
-    $scope.orderToggled[type] = !$scope.orderToggled[type];
+    $scope.sortRevisions = function(patt){
+    	$scope.defectsList = artifactsManager.sortBy(patt, $scope.defectsList );
+    	$scope.groupDict = APIservice.groupByDay($scope.defectsList);
+    };
 
-    var patt = "";
-    var count = 0;
+    $scope.toggle_filter = function(){
+    	console.log('toggle_filter');
+    	$scope.hide_filter = !$scope.hide_filter;
+    	$scope.hideButtonText = $scope.hide_filter? "Show":"Hide";	
+    };
 
-    for(var key in $scope.orderToggled){
-      if($scope.orderToggled[key] === true){
-        patt = patt + '|('+key+')';
-        count++;
-      }
+    $scope.toggle = function(type){
+    	$scope.orderToggled[type] = !$scope.orderToggled[type];
+
+    	var patt = "";
+    	var count = 0;
+
+    	for(var key in $scope.orderToggled){
+    		if($scope.orderToggled[key] === true){
+    			patt = patt + '|('+key+')';
+    			count++;
+    		}
+    	}
+
+    	if(count === 0){
+    		patt = '.';
+    	}else{
+    		patt = patt.substring(1);
+    	}
+    	$scope.sortRevisions(patt);
     }
 
-    if(count === 0){
-      patt = '.';
-    }else{
-      patt = patt.substring(1);
+    $scope.groupBy = function(property){
+    	$scope.groupDict2 = APIservice.groupBy($scope.defectsList, property, $scope.pool.property  );
     }
-   $scope.sortRevisions(patt);
-  }
 
-  $scope.groupBy = function(property){
-  	  $scope.groupDict2 = APIservice.groupBy($scope.defectsList, property, $scope.pool.property  );
-  }
-
-  });
+});
 
 });

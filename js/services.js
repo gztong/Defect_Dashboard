@@ -18,13 +18,6 @@ angular.module('DefectsApp.services', []).
       });
     }
 
-    API.getDrivers = function() {
-      return $http({
-        method: 'JSONP', 
-        url: 'http://ergast.com/api/f1/2013/driverStandings.json?callback=JSON_CALLBACK'
-      });
-    }
-
     API.tempData = function() {
       return $http.get('content.json');
     }
@@ -33,7 +26,7 @@ angular.module('DefectsApp.services', []).
       return $http({
         method: 'JSONP', 
         // sample: https://rally1.rallydev.com/slm/webservice/v2.0/defects?query=(Project.ObjectID%20=%206537932590)&order=CreationDate%20desc&pagesize=10&fetch=State,FormattedID,Owner,RevisionHistory
-        url: 'https://rally1.rallydev.com/slm/webservice/v2.0/defects?query=(Project.ObjectID = '+id+')&order=CreationDate desc&pagesize=30&fetch=Priority,Severity,State,ObjectID,FormattedID,Owner,RevisionHistory&jsonp=JSON_CALLBACK'
+        url: 'https://rally1.rallydev.com/slm/webservice/v2.0/defects?query=(Project.ObjectID = '+id+')&order=CreationDate desc&pagesize=30&fetch=Tags,Priority,Severity,State,ObjectID,FormattedID,Owner,RevisionHistory&jsonp=JSON_CALLBACK'
       });
     }
 
@@ -45,11 +38,20 @@ angular.module('DefectsApp.services', []).
     // }
 
     API.getRevisions = function(ref){
-      return $http({
-        method: 'JSONP', 
-        // sample: https://rally1.rallydev.com/slm/webservice/v2.0/revisionhistory/425698796/revisions?jsonp=JSON_CALLBACK
-        url: ref+'/revisions?pagesize=200&jsonp=JSON_CALLBACK'
-      });
+    	return $http({
+			method: 'JSONP', 
+     	    // Sample: https://rally1.rallydev.com/slm/webservice/v2.0/revisionhistory/425698796/revisions?jsonp=JSON_CALLBACK
+  		    url: ref+'/revisions?pagesize=200&jsonp=JSON_CALLBACK'
+   		 });
+    }
+
+    API.getTags = function(ref){
+    	if(ref === null) return null;
+    	return $http({
+    		method: 'JSONP', 
+    		// Sample: https://rally1.rallydev.com/slm/webservice/v2.0/Defect/47941087530/Tags
+       		url: ref+'?jsonp=JSON_CALLBACK'
+  	    });
     }
 
 
@@ -122,37 +124,25 @@ angular.module('DefectsApp.services', []).
 
 	API.getPropertyPool = function(arr){
 		var keys = Object.keys(arr[0]);
-		keys = ['State', 'Severity', 'Owner'];
+		keys = ['State', 'Severity', 'Tags', 'Priority', 'OwnerName'];
 		var pool = {};
 		for(var i=0; i<arr.length; i++){
 			for(var j=0; j<keys.length; j++){
 				if( pool[keys[j]] === undefined ){
 					pool[keys[j]] = [];
 				}
-
-
-				if( keys[j] === 'Owner'){
-					if(arr[i]['Owner'] !== null && pool['Owner'].indexOf(arr[i]['Owner']._refObjectName) < 0){
-						pool['Owner'].push(arr[i]['Owner']._refObjectName);
-					}else if ( pool['Owner'].indexOf('No Owner' ) < 0){
-						pool['Owner'].push('No Owner');
-					}
+				// 'Tags' is a special case
+				if(keys[j] === 'Tags'){
+					if (pool['Tags'].indexOf('No Tags')<0 && arr[i]['Tags'].length===0) {pool['Tags'].push('No Tags');};
+					arr[i]['Tags'].forEach(function(tag){
+						if(pool['Tags'].indexOf(tag) <0 ){
+							pool['Tags'].push(tag);
+						}
+					});
+				// Other normal cases
 				}else if( pool[keys[j]].indexOf(arr[i][keys[j]]) < 0) {
 					pool[keys[j]].push(arr[i][keys[j]]);
 				}
-
-
-				// if( pool[keys[j]].indexOf(arr[i][keys[j]]) < 0){
-				// 	if( keys[j] === 'Owner'){
-				// 		if(arr[i]['Owner'] !== null ){
-				// 			pool[keys[j]].push(arr[i][keys[j]]._refObjectName);
-				// 		}else{
-				// 			pool[keys[j]].push('No Owner');
-				// 		}
-				// 	}else{
-				// 		pool[keys[j]].push(arr[i][keys[j]]);
-				// 	}
-				// }
 			}
 		}
 		console.log(pool);
@@ -161,22 +151,36 @@ angular.module('DefectsApp.services', []).
 
 	API.groupBy = function(arr, property, pool){
 
-
 		var groups = {};
 		var keys = pool[property];
 
 		if(property === 'Owner'){
 			for(var i=0; i< arr.length; i++){
-
 				if ( arr[i][property] === null){
 					arr[i][property] = {};
 					arr[i][property]._refObjectName = 'No Owner';
 				} 
-
 				if (groups[arr[i][property]._refObjectName] === undefined ){
 					groups[arr[i][property]._refObjectName] = [];
 				}
 				groups[arr[i][property]._refObjectName].push(arr[i]);
+			}
+			return groups;
+		}
+		//TODO
+		if(property === 'Tags'){
+			groups['No Tags'] = [];
+			for(var i=0; i< arr.length; i++){
+				if ( arr[i][property].length ===0){
+					groups['No Tags'].push(arr[i]);
+				}else{	// not an empty tag array
+					for(var j=0; j< arr[i][property].length; j++){
+						if (groups[arr[i][property][j]]=== undefined ){
+							groups[arr[i][property][j]] = [];
+						}
+						groups[arr[i][property][j]].push(arr[i]);
+					}
+				}
 			}
 			return groups;
 		}

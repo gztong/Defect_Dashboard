@@ -33,4 +33,18 @@ body {
   .mainTable tr:nth-child(even) {
     background-color: #CCC; }
 
+.hide {
+  display: none; }
+
+.show {
+  display: block !important; }
+
+.label {
+  display: inline-block;
+  max-width: 50px !important; }
+
+.tags {
+  width: 50px !important;
+  overflow: hidden; }
+
 /*# sourceMappingURL=projects.css.map */
