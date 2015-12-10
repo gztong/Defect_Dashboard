@@ -3,105 +3,109 @@
 <section id="main"> 
   <div class="header">
     <a href="#/projects"> <- Back to Projects list</a>
-
   </div>
 
-  <uib-tabset>
-  <uib-tab heading="News">
-
-    <button class="testButton" onClick="click"> test </button>
-      <ul class="nav nav-pills">
-      <li class= "test"><a>test list</a></li>
-    </ul>
-
-  <div class="news-content">
-    <div class = "toolBar"> 
-      <p class="orderButton" ng-repeat = "(key, value) in orderToggled">
-        <a class="btn btn-default" role="button" ng-click="toggle(key)" ng-class="{toggled : value}" >{{key}}</a>
-      </p>
+  <div class="search">
+    <div class="input-group">
+      <input ng-model="nameFilter.text" type="text" class="form-control" placeholder="Search..." aria-describedby="basic-addon2"> </input>
+      <span class="input-group-addon" id="basic-addon2">Go</span>
     </div>
-  
-    <table class="table table-hover">
-
-      <tbody ng-repeat="(day, item) in groupDict">
-        <tr colspan="4">
-          <th> {{day}} </th>
-        </tr>
-        <tr ng-repeat="defect in item | filter: searchFilter" ng-class="{strike: defect.Gone}">
-          <td class="index">{{$index + 1}}</td>
-          <td>{{ defect.FormattedID}}</td>
-          <td>
-            <a href={{defect.Url}} target="_blank"> {{defect.Name}} </a>
-           
-          </td>
-          <td>{{defect.Owner._refObjectName}}</td>
-            <td>{{defect.RevisionCreationDateFormatted}}</td>
-  <td>{{defect.Revisiondesc}}</td>
-  <td>{{defect.State}}</td>
-        </tr>
-      </tbody>
-    </table>
-    <!-- end Table Content -->
-
   </div>
- <!--  end news-content -->
+  <!-- end nav bar -->
 
 
-</uib-tab>
 
-<uib-tab heading="Group">
+  <div class="tabset">
 
-  <div class="toolBar"> 
-    <div class="filter-container">
-      <div class= "property-container container-fluid list-group" ng-repeat= "(key, value) in pool.property">
-        <div class="property list-group-item list-group-item-info" ng-click="groupBy(key)">{{key}}<span class="badge">{{groupDict2[key].length}}</span></div>
-        <div class="option list-group-item" ng-repeat="option in value" ng-click="addFilter(key, option) " ng-class="{'active': propertyFilter[key].indexOf(option)> -1, 'hide': hide_filter, 'show': !hide_filter}">{{option}}</div>
+    <uib-tabset>
+    <uib-tab heading="News">
+    <div class="news-content">
+      <div class = "toolBar"> 
+        <p class="orderButton" ng-repeat = "(key, value) in orderToggled">
+          <a class="btn btn-default" role="button" ng-click="toggle(key)" ng-class="{toggled : value}" >{{key}}</a>
+        </p>
+      </div>
+
+      <table class="table table-hover">
+
+        <tbody ng-repeat="(day, item) in groupDict">
+          <tr colspan="4">
+            <th> {{day}} </th>
+          </tr>
+          <tr ng-repeat="defect in item | filter: searchFilter" ng-class="{strike: defect.Gone}">
+            <td class="index">{{$index + 1}}</td>
+            <td>{{ defect.FormattedID}}</td>
+            <td>
+              <a href={{defect.Url}} target="_blank"> {{defect.Name}} </a>
+
+            </td>
+            <td>{{defect.Owner._refObjectName}}</td>
+            <td>{{defect.RevisionCreationDateFormatted}}</td>
+            <td>{{defect.Revisiondesc}}</td>
+            <td>{{defect.State}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- end Table Content -->
+
+    </div>
+    <!--  end news-content -->
+  </uib-tab>
+
+    <uib-tab heading="Group">
+
+    <div class="toolBar"> 
+      <div class="filter-container">
+        <div class= "property-container container-fluid list-group" ng-repeat= "(key, value) in pool.property">
+          <div class="property list-group-item list-group-item-info" ng-click="groupBy(key)">{{key}}<span class="badge">{{groupDict2[key].length}}</span></div>
+          <div class="option list-group-item" ng-repeat="option in value" ng-click="addFilter(key, option) " ng-class="{'active': propertyFilter[key].indexOf(option)> -1, 'hide': hide_filter, 'show': !hide_filter}">{{option}}</div>
         </div>
         <button class="btn btn-default" ng-click="toggle_filter()"> {{hideButtonText}} </button>
-        
+
+      </div>
     </div>
-  </div>
-<!--  end toolbar -->
-  <div class="table-container">
-    <table class="table table-hover">
-      <tbody ng-repeat="(key, item) in groupDict2">
-        <tr colspan="4">
-          <th> {{key}} </th>
-        </tr>
-        <tr ng-repeat="defect in item | filter: searchFilter | filter: groupFilter" ng-class="{strike: defect.Gone}">
-          <td class="index">{{$index + 1}}</td>
-          <td>{{ defect.FormattedID}}</td>
-          <td>
-            <a href={{defect.Url}} target="_blank"> {{defect.Name}} </a>
-           
-          </td>
-          <td>{{defect.OwnerName}}</td>
-          <td>{{defect.Severity}}</td>
-          <td class="tags">
-            <span ng-repeat="tag in defect.Tags" class="label" ng-class="getLabelClass(tag)">
-             {{tag}}
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-    <!-- end Table Container -->
-</uib-tab>
+    <!--  end toolbar -->
+    <div class="table-container">
+      <table class="table table-hover">
+        <tbody ng-repeat="(key, item) in groupDict2">
+          <tr colspan="4">
+            <th> {{key}} </th>
+          </tr>
+          <tr ng-repeat="defect in item | filter: searchFilter | filter: groupFilter" ng-class="{strike: defect.Gone}">
+            <td class="index">{{$index + 1}}</td>
+            <td>{{ defect.FormattedID}}</td>
+            <td>
+              <a href={{defect.Url}} target="_blank"> {{defect.Name}} </a>
+
+            </td>
+            <td>{{defect.OwnerName}}</td>
+            <td>{{defect.Severity}}</td>
+            <td class="tags">
+              <span ng-repeat="tag in defect.Tags" class="label" ng-class="getLabelClass(tag)">
+               {{tag}}
+             </span>
+           </td>
+         </tr>
+       </tbody>
+     </table>
+   </div>
+   <!-- end Table Container -->
+  </uib-tab>
 <!-- end group section -->
 
+  <!-- start graph section -->
+  <uib-tab heading="Graph">
+  static
+  </uib-tab>
+  <!-- end graph section -->
 
-
-
-<div class="search">
-  <div class="input-group">
-    <input ng-model="nameFilter.text" type="text" class="form-control" placeholder="Search..." aria-describedby="basic-addon2"> </input>
-    <span class="input-group-addon" id="basic-addon2">Go</span>
-  </div>
-</div>
-<!-- end nav bar -->
 
 </uib-tabset>
 
+  <div id="loading">
+    <img id="loading-image" src="../images/loading_spinner.gif" alt="Loading..." />
+  </div>
+
+</div>
 
 </section>

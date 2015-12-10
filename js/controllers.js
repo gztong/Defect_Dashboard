@@ -52,6 +52,10 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
   $scope.propertyFilter = {};
   $scope.nameFilter ={};
   $scope.pool = {};
+
+  // for graph TODO
+
+
   $scope.getLabelClass = function(tag){
   	var classes = ['label-primary', 'label-danger', 'label-success', 'label-info', 'label-warning'];
   	var i = hashCode(tag) % 5;
@@ -149,6 +153,7 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
         $scope.groupDict = APIservice.groupByDay($scope.defectsList);
 
         $scope.pool.property = APIservice.getPropertyPool($scope.defectsList);
+        $('#loading').hide(); // Stop spinning loader
 
         $scope.groupDict2 = APIservice.groupBy($scope.defectsList, 'State', $scope.pool.property  );
     }); 

@@ -18,12 +18,11 @@ defectsApp.config(['$routeProvider', function($routeProvider){
 
 
 //Run Block
-defectsApp.run( ['$http', function ($http){
-	// Predefine the API's value from Parse.com
-	$http.defaults.headers.common = {
-	'X-Parse-Application-Id':'hfHYNm2LY9jqxXrnOOuNQ1wTrQpL3vXDsm8obtPw',
-	'X-Parse-REST-API-Key':'4OdKh69gqEucTaMKefJnHt7GFaTUGF1qxvloIWaA'
-	}
-
-}]);
+// defectsApp.run( ['$http', function ($http){
+// 	// Predefine the API's value from Parse.com
+// 	// $http.defaults.headers.common = {
+// 	// 'X-Parse-Application-Id':'hfHYNm2LY9jqxXrnOOuNQ1wTrQpL3vXDsm8obtPw',
+// 	// 'X-Parse-REST-API-Key':'4OdKh69gqEucTaMKefJnHt7GFaTUGF1qxvloIWaA'
+// 	// }
+// }]);
 
