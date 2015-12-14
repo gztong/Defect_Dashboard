@@ -47,7 +47,9 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
       'Tags': false,
       'Package': false,
       'Changeset': false,
-      'Resolution': false
+      'Resolution': false,
+      'Ready': false,
+      'State': false
   };
   $scope.propertyFilter = {};
   $scope.nameFilter ={};

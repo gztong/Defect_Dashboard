@@ -6,7 +6,7 @@
   <div class="search">
     <div class="input-group">
       <input ng-model="nameFilter.text" type="text" class="form-control" placeholder="Search..." aria-describedby="basic-addon2"> </input>
-   <!--    <span class="input-group-addon" id="basic-addon2">Go</span> -->
+      <span class="input-group-addon" id="basic-addon2">Search</span>
     </div>
   </div>
   <!-- end nav bar -->
@@ -31,7 +31,8 @@
           </tr>
           <tr ng-repeat="defect in item | filter: searchFilter" ng-class="{strike: defect.Gone}">
             <td class="index">{{$index + 1}}</td>
-            <td>{{ defect.FormattedID}}</td>
+            <td>
+              <a href={{defect.Url}} target="_blank">  {{ defect.FormattedID}} </a> </td>
             <td>
               <a href={{defect.Url}} target="_blank"> {{defect.Name}} </a>
 
