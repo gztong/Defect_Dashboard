@@ -54,6 +54,7 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
   $scope.propertyFilter = {};
   $scope.nameFilter ={};
   $scope.pool = {};
+  $scope.loading = true;
 
   $scope.getLabelClass = function(tag){
   	var classes = ['label-primary', 'label-danger', 'label-success', 'label-info', 'label-warning'];
@@ -127,32 +128,29 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
   }
 
 
+  var load_function =
   artifactsManager.loadAllArtifacts($scope.id).then(
     function(result){
-    return result;
-    }).then(function(result){
 
-   $scope.basicList = artifactsManager.buildArtifacts(result);
-      artifactsManager.getTags($scope.basicList).then(function(result){
-   		var withTags = result;
-   }
+       $scope.basicList = artifactsManager.buildArtifacts(result);
+     }).then(
+    function(){
+       artifactsManager.getTags($scope.basicList).then(function(result){
+       var withTags = result;
+         artifactsManager.getRevisions($scope.basicList).then(function(result){
+            //$scope.LastRevisions = result;
+            $scope.revisionsInfo = result; 
+            $scope.defectsList = APIservice.mergeArrays($scope.basicList, $scope.revisionsInfo);
 
-   ).then(function(basicList){
+            $scope.groupDict = APIservice.groupByDay($scope.defectsList);
 
-   artifactsManager.getRevisions($scope.basicList).then(function(result){
-        //$scope.LastRevisions = result;
-        $scope.revisionsInfo = result; 
-        $scope.defectsList = APIservice.mergeArrays($scope.basicList, $scope.revisionsInfo);
+            $scope.pool.property = APIservice.getPropertyPool($scope.defectsList);
 
-        $scope.groupDict = APIservice.groupByDay($scope.defectsList);
-
-        $scope.pool.property = APIservice.getPropertyPool($scope.defectsList);
-
-        $scope.groupDict2 = APIservice.groupBy($scope.defectsList, 'State', $scope.pool.property  );
-        $('#loading').hide(); // Stop spinning loader
-    }); 
-
-   });
+            $scope.groupDict2 = APIservice.groupBy($scope.defectsList, 'State', $scope.pool.property);
+           // $('#loading').hide(); // Stop spinning loader
+            $scope.loading = false;
+          });
+    });
 
 
 
@@ -194,25 +192,33 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
     	$scope.groupDict2 = APIservice.groupBy($scope.defectsList, property, $scope.pool.property  );
     }
 
-    $scope.refresh = function(number){
-      if(number === undefined)
-      number = 10;
-    //  $('#loading').show();
-      console.log(number);
+    $scope.refresh = function(pagesize){
+      if(pagesize === undefined){
+              pagesize = 100;
+      }
 
+     $scope.loading = true;
 
-       artifactsManager.getRevisions($scope.basicList).then(function(result){
-        //$scope.LastRevisions = result;
-        $scope.revisionsInfo = result; 
-        $scope.defectsList = APIservice.mergeArrays($scope.basicList, $scope.revisionsInfo);
+     artifactsManager.loadAllArtifacts($scope.id, pagesize).then(
+     function(result){
+       $scope.basicList = artifactsManager.buildArtifacts(result);
+     }).then(
+     function(){
+       artifactsManager.getTags($scope.basicList).then(function(result){
+         var withTags = result;
+         artifactsManager.getRevisions($scope.basicList).then(function(result){
+            $scope.revisionsInfo = result; 
+            $scope.defectsList = APIservice.mergeArrays($scope.basicList, $scope.revisionsInfo);
 
-        $scope.groupDict = APIservice.groupByDay($scope.defectsList);
+            $scope.groupDict = APIservice.groupByDay($scope.defectsList);
 
-        $scope.pool.property = APIservice.getPropertyPool($scope.defectsList);
+            $scope.pool.property = APIservice.getPropertyPool($scope.defectsList);
 
-        $scope.groupDict2 = APIservice.groupBy($scope.defectsList, 'State', $scope.pool.property  );
-       // $('#loading').hide(); // Stop spinning loader
-    }); 
+            $scope.groupDict2 = APIservice.groupBy($scope.defectsList, 'State', $scope.pool.property);
+            $scope.loading = false; // Stop spinning loader
+          });
+       });
+     }); 
 
       
 

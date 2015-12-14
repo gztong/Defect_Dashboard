@@ -46,10 +46,10 @@ angular.module('DefectsApp.manager', [])
 .factory('artifactsManager',function artifactsManager ($http, $q, Artifact, APIservice) {  
     var manager = {
         /* Public Methods */
-        loadAllArtifacts: function(id) {
+        loadAllArtifacts: function(id, pagesize) {
             var deferred = $q.defer();
             var scope = this;
-            APIservice.getDefectsForId(id).
+            APIservice.getDefectsForId(id, pagesize).
                 //APIservice.tempData().
 	            success(function(response) {
 		     		var artifacts = [];

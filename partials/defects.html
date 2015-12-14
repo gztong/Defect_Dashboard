@@ -1,4 +1,7 @@
+
 <section id="main"> 
+
+
   <div class="header">
     <a href="#/projects"> <- Back to Projects list</a>
   </div>
@@ -13,11 +16,15 @@
   <div class="refresh">
     <div class="input-group">
     <input ng-model="pagesize" type="number" class="form-control" placeholder="1~200"> </input>
-      <span class="input-group-addon btn btn-default" ng-click="refresh()"><span class="glyphicon glyphicon-repeat"></span></span> 
+      <span class="input-group-addon btn btn-default" ng-click="refresh(pagesize)"><span class="glyphicon glyphicon-repeat"></span></span> 
     </div>
   </div>
 
    <!-- Refresh button -->
+  
+  <div id="loading" ng-if="loading">
+    <img id="loading-image" src="./images/loading_spinner.gif"/>
+  </div>
 
 
   <!-- end nav bar -->
@@ -111,10 +118,7 @@
 
 </uib-tabset>
 
-  <div id="loading">
-    <img id="loading-image" src="./images/loading_spinner.gif"/>
-  </div>
-
+  
 </div>
 
 
