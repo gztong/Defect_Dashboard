@@ -25,8 +25,8 @@ angular.module('DefectsApp.services', []).
     API.getDefectsForId = function(id) {
       return $http({
         method: 'JSONP', 
-        // sample: https://rally1.rallydev.com/slm/webservice/v2.0/defects?query=(Project.ObjectID%20=%206537932590)&order=CreationDate%20desc&pagesize=10&fetch=State,FormattedID,Owner,RevisionHistory
-        url: 'https://rally1.rallydev.com/slm/webservice/v2.0/defects?query=(Project.ObjectID = '+id+')&order=CreationDate desc&pagesize=30&fetch=Tags,Priority,Severity,State,ObjectID,FormattedID,Owner,RevisionHistory&jsonp=JSON_CALLBACK'
+        // sample: https://rally1.rallydev.com/slm/webservice/v2.0/defects?query=(Project.ObjectID%20=%206537932590)&order=LastUpdateDate%20desc&pagesize=10&fetch=State,FormattedID,Owner,RevisionHistory
+        url: 'https://rally1.rallydev.com/slm/webservice/v2.0/defects?query=(Project.ObjectID = '+id+')&order=LastUpdateDate desc&pagesize=100&fetch=Tags,Priority,Severity,State,ObjectID,FormattedID,Owner,RevisionHistory&jsonp=JSON_CALLBACK'
       });
     }
 
