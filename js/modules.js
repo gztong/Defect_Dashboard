@@ -45,46 +45,7 @@ angular.module('DefectsApp')
 angular.module('DefectsApp.manager', [])
 .factory('artifactsManager',function artifactsManager ($http, $q, Artifact, APIservice) {  
     var manager = {
-        _pool: {},
-        _retrieveInstance: function(Id, Data) {
-            var instance = this._pool[Id];
-
-            if (instance) {
-                instance.setData(Data);
-            } else {
-                instance = new Artifact(Data);
-                this._pool[Id] = instance;
-            }
-
-            return instance;
-        },
-        _search: function(Id) {
-            return this._pool[Id];
-        },
-        _load: function(Id, deferred) {
-            var scope = this;
-            // TODO
-            // $http.get('ourserver/books/' + bookId)
-            //     .success(function(bookData) {
-            //         var book = scope._retrieveInstance(bookData.id, bookData);
-            //         deferred.resolve(book);
-            //     })
-            //     .error(function() {
-            //         deferred.reject();
-            //     });
-        },
         /* Public Methods */
-        /* Use this function in order to get an instance by its id */
-        getArtifact: function(Id) {
-            var deferred = $q.defer();
-            var artifact = this._search(Id);
-            if (artifact) {
-                deferred.resolve(artifact);
-            } else {
-                this._load(Id, deferred);
-            }
-            return deferred.promise;
-        },
         loadAllArtifacts: function(id) {
             var deferred = $q.defer();
             var scope = this;
@@ -192,27 +153,14 @@ angular.module('DefectsApp.manager', [])
             var patt = new RegExp(pattStr.toUpperCase());
             console.log(arr);
             arr.forEach(function (val, i) {
-                //var result = APIservice.filterRevisions(val.data.QueryResult.Results, patt);  
                 var result = APIservice.filterRevisions(val.Revisions, patt);  
                 val.RevisionCreationDate = result.CreationDate;
                 val.Revisiondesc = result.Description;
-
-
-               // window.apiList[i].RevisionCreationDate =  result.CreationDate;
-               // window.apiList[i].Revisiondesc =  result.Description;
-              //  console.log("ID: " +window.apiList[i].FormattedID +", Date: "+ window.apiList[i].RevisionCreationDate);
             });
 
             return arr;
-        },
-        
-
-        test1: function(){
-        	console.log('test');
         }
-
      };
-
-
+     
     return manager;
 });

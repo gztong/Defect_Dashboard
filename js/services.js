@@ -30,13 +30,6 @@ angular.module('DefectsApp.services', []).
       });
     }
 
-    // API.getDriverRaces = function(id) {
-    //   return $http({
-    //     method: 'JSONP', 
-    //     url: 'http://ergast.com/api/f1/2013/drivers/'+ id +'/results.json?callback=JSON_CALLBACK'
-    //   });
-    // }
-
     API.getRevisions = function(ref){
     	return $http({
 			method: 'JSONP', 
@@ -53,8 +46,6 @@ angular.module('DefectsApp.services', []).
        		url: ref+'?jsonp=JSON_CALLBACK'
   	    });
     }
-
-
 
     // API.mergeObjects = function(obj1,obj2){
     //   var obj3 = {};
@@ -145,7 +136,7 @@ angular.module('DefectsApp.services', []).
 				}
 			}
 		}
-		console.log(pool);
+
 		return pool;
 	}
 
