@@ -8,6 +8,10 @@ body {
     width: 30%;
     margin-left: 10px;
     float: right; }
+  body .refresh {
+    width: 150px;
+    margin-left: 300px;
+    float: right; }
 
 .toolBar {
   margin: 10px; }

@@ -137,6 +137,10 @@ angular.module('DefectsApp.services', []).
 			}
 		}
 
+		for(var j=0; j<keys.length; j++){
+			pool[keys[j]].sort();
+		}
+
 		return pool;
 	}
 
@@ -158,7 +162,7 @@ angular.module('DefectsApp.services', []).
 			}
 			return groups;
 		}
-		//TODO
+
 		if(property === 'Tags'){
 			groups['No Tags'] = [];
 			for(var i=0; i< arr.length; i++){

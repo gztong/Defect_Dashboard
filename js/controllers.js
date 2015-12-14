@@ -55,9 +55,6 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
   $scope.nameFilter ={};
   $scope.pool = {};
 
-  // for graph TODO
-
-
   $scope.getLabelClass = function(tag){
   	var classes = ['label-primary', 'label-danger', 'label-success', 'label-info', 'label-warning'];
   	var i = hashCode(tag) % 5;
@@ -130,24 +127,19 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
   }
 
 
-
   artifactsManager.loadAllArtifacts($scope.id).then(
     function(result){
     return result;
-    },
-    function(error){
-      console.log(error.statusText);
-    }
-  ).then(function(result){
+    }).then(function(result){
+
    $scope.basicList = artifactsManager.buildArtifacts(result);
-
-   var listtest = artifactsManager.getTags($scope.basicList).then(function(result){
+      artifactsManager.getTags($scope.basicList).then(function(result){
    		var withTags = result;
-   		console.log(result);
-   });
+   }
 
+   ).then(function(basicList){
 
-    artifactsManager.getRevisions($scope.basicList).then(function(result){
+   artifactsManager.getRevisions($scope.basicList).then(function(result){
         //$scope.LastRevisions = result;
         $scope.revisionsInfo = result; 
         $scope.defectsList = APIservice.mergeArrays($scope.basicList, $scope.revisionsInfo);
@@ -155,10 +147,14 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
         $scope.groupDict = APIservice.groupByDay($scope.defectsList);
 
         $scope.pool.property = APIservice.getPropertyPool($scope.defectsList);
-        $('#loading').hide(); // Stop spinning loader
 
         $scope.groupDict2 = APIservice.groupBy($scope.defectsList, 'State', $scope.pool.property  );
+        $('#loading').hide(); // Stop spinning loader
     }); 
+
+   });
+
+
 
 
 
@@ -197,6 +193,31 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
     $scope.groupBy = function(property){
     	$scope.groupDict2 = APIservice.groupBy($scope.defectsList, property, $scope.pool.property  );
     }
+
+    $scope.refresh = function(number){
+      if(number === undefined)
+      number = 10;
+    //  $('#loading').show();
+      console.log(number);
+
+
+       artifactsManager.getRevisions($scope.basicList).then(function(result){
+        //$scope.LastRevisions = result;
+        $scope.revisionsInfo = result; 
+        $scope.defectsList = APIservice.mergeArrays($scope.basicList, $scope.revisionsInfo);
+
+        $scope.groupDict = APIservice.groupByDay($scope.defectsList);
+
+        $scope.pool.property = APIservice.getPropertyPool($scope.defectsList);
+
+        $scope.groupDict2 = APIservice.groupBy($scope.defectsList, 'State', $scope.pool.property  );
+       // $('#loading').hide(); // Stop spinning loader
+    }); 
+
+      
+
+    }
+
 
 });
 

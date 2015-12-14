@@ -9,6 +9,17 @@
       <span class="input-group-addon" id="basic-addon2">Search</span>
     </div>
   </div>
+
+  <div class="refresh">
+    <div class="input-group">
+    <input ng-model="pagesize" type="number" class="form-control" placeholder="1~200"> </input>
+      <span class="input-group-addon btn btn-default" ng-click="refresh()"><span class="glyphicon glyphicon-repeat"></span></span> 
+    </div>
+  </div>
+
+   <!-- Refresh button -->
+
+
   <!-- end nav bar -->
 
 
@@ -96,9 +107,7 @@
   <div class="embed-responsive embed-responsive-16by9">
     <iframe class="embed-responsive-item" src="graph.html"></iframe>
   </div>
-
   <!-- end graph section -->
-
 
 </uib-tabset>
 
@@ -107,5 +116,6 @@
   </div>
 
 </div>
+
 
 </section>
