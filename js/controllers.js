@@ -56,8 +56,6 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
   $scope.pool = {};
   $scope.loading = true;
 
-  $("[data-toggle=popover]").popover();
-  
   $scope.getLabelClass = function(tag){
   	var classes = ['label-primary', 'label-danger', 'label-success', 'label-info', 'label-warning'];
   	var i = hashCode(tag) % 5;
@@ -130,8 +128,8 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
   }
 
 
-  var load_function =
-  artifactsManager.loadAllArtifacts($scope.id).then(
+  // loading defects
+  artifactsManager.loadAllArtifacts($scope.id, 100).then(
     function(result){
 
        $scope.basicList = artifactsManager.buildArtifacts(result);

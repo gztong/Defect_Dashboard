@@ -1,5 +1,5 @@
 body {
-  font: 130% Helvetica, sans-serif;
+  font: 100% 120%, Helvetica, sans-serif;
   color: #334; }
   body #main {
     width: 90%;
@@ -28,7 +28,11 @@ body {
 
 .strike {
   text-decoration: line-through;
-  color: #DDD !important; }
+  color: #BBB; }
+
+.popoverStyle {
+  text-decoration: none !important;
+  color: black !important; }
 
 .mainTable {
   td-border: 2px solid black; }

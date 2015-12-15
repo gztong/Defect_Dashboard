@@ -51,13 +51,10 @@
               <a href={{defect.Url}} target="_blank">  {{ defect.FormattedID}} </a> </td>
             <td>
               <a href={{defect.Url}} target="_blank"> {{defect.Name}} </a>
-
             </td>
-            <td>{{defect.Owner._refObjectName}}</td>
-            <td>{{defect.RevisionCreationDateFormatted}}</td>
-            <td>{{defect.State}}</td>
+            <td>{{defect.OwnerName}}</td>
             <td>
-              <button popover-placement="left" uib-popover={{defect.Revisiondesc}} type="button" class="btn btn-default"> 
+              <button popover-placement="left" uib-popover="Last update: {{defect.Revisiondesc}} at {{defect.RevisionCreationDateFormatted}}" type="button" class="btn btn-default popoverStyle"> 
                 <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
               </button>
             </td>

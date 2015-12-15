@@ -1,7 +1,7 @@
-$font-stack:    Helvetica, sans-serif, 14pt;
+$font-stack:   120%, Helvetica, sans-serif;
 $primary-color: #334;
 $row-color: #CCC;
-$grey-text: #DDD;
+$grey-text: #BBB;
 
 body {
   font: 100% $font-stack;
@@ -47,7 +47,12 @@ body {
 }
 .strike {
     text-decoration: line-through;
-    color: $grey-text !important;
+    color: $grey-text; 
+}
+
+.popoverStyle{
+  text-decoration: none !important;
+  color: black !important;
 }
 
 .mainTable {

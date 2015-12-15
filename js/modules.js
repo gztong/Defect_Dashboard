@@ -151,7 +151,6 @@ angular.module('DefectsApp.manager', [])
 
         sortBy: function(pattStr, arr){
             var patt = new RegExp(pattStr.toUpperCase());
-            console.log(arr);
             arr.forEach(function (val, i) {
                 var result = APIservice.filterRevisions(val.Revisions, patt);  
                 val.RevisionCreationDate = result.CreationDate;
