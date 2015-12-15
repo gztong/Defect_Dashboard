@@ -44,6 +44,8 @@
             <th></th>
             <th></th>
             <th> {{day}} </th>
+            <th></th>
+            <th></th>
           </tr>
           <tr ng-repeat="defect in item | filter: searchFilter" ng-class="{strike: defect.Gone}">
             <td class="index">{{$index + 1}}</td>
@@ -87,13 +89,17 @@
             <th></th>
             <th></th>
             <th> {{day}} </th>
+            <th></th>
+            <th></th>
+            <th></th>
           </tr>
           <tr ng-repeat="defect in item | filter: searchFilter | filter: groupFilter" ng-class="{strike: defect.Gone}">
             <td class="index">{{$index + 1}}</td>
-            <td>{{ defect.FormattedID}}</td>
+            <td>
+              <a href={{defect.Url}} target="_blank"> {{defect.FormattedID}} </a>
+            </td>
             <td>
               <a href={{defect.Url}} target="_blank"> {{defect.Name}} </a>
-
             </td>
             <td>{{defect.OwnerName}}</td>
             <td>{{defect.Severity}}</td>
