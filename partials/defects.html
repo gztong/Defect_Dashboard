@@ -1,6 +1,4 @@
-
 <section id="main"> 
-
 
   <div class="header">
     <a href="#/projects"> <- Back to Projects list</a>
@@ -57,8 +55,12 @@
             </td>
             <td>{{defect.Owner._refObjectName}}</td>
             <td>{{defect.RevisionCreationDateFormatted}}</td>
-            <td>{{defect.Revisiondesc}}</td>
             <td>{{defect.State}}</td>
+            <td>
+              <button popover-placement="left" uib-popover={{defect.Revisiondesc}} type="button" class="btn btn-default"> 
+                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>

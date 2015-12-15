@@ -27,33 +27,35 @@
 </html> -->
 
 
- <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"><html><head><title>
-Defect Trend App </title>
-<script type="text/javascript" src="https://rally1.rallydev.com/apps/2.0/sdk-debug.js"></script>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+    <title>Defect Trend App </title>
+    <script type="text/javascript" src="https://rally1.rallydev.com/apps/2.0/sdk-debug.js"></script>
 
     <script type="text/javascript">
 
     var states = ['Open','Submitted']; // all enum values for 'State'
     var priorities = ['High', 'Medium', 'Low']
     var field = 'State'; 
-    var minDate = new Date(new Date() - 86400000*200); //milliseconds in day = 86400000
+    var minDate = new Date(new Date() - 86400000*180); //milliseconds in day = 86400000
     var timePeriod = new Date(new Date()- minDate);
     //var ReleaseOID = XXXXXX; // your release Oid
 
     Rally.onReady(function () {
-            Ext.define('CustomApp', {
-                extend: 'Rally.app.App',
-                componentCls: 'app',
-                launch: function() {    
-                    return this.createTrendChart();
-                },
+        Ext.define('CustomApp', {
+            extend: 'Rally.app.App',
+            componentCls: 'app',
+            launch: function() {    
+                return this.createTrendChart();
+            },
 
-                createTrendChart: function() {
-                    var ProjectOid;
-                    ProjectOid = this.getContext().getProject().ObjectID;
+            createTrendChart: function() {
+                var ProjectOid;
+                ProjectOid = this.getContext().getProject().ObjectID;
 
-                    Ext.define('My.TrendCalc', {
-                        extend: 'Rally.data.lookback.calculator.TimeSeriesCalculator',
+                Ext.define('My.TrendCalc', {
+                    extend: 'Rally.data.lookback.calculator.TimeSeriesCalculator',
                         // getDerivedFieldsOnInput: function() {
                         //     var m = _.map(states, function(state) {
                         //         return {
@@ -102,29 +104,29 @@ Defect Trend App </title>
 
                     });
 
-                    this.myTrendChart = Ext.create('Rally.ui.chart.Chart', {
-                        storeType: 'Rally.data.lookback.SnapshotStore',
-                        storeConfig:  {
-                            find: {
-                                _TypeHierarchy: "Defect",
-                                State: {$lt: "Closed" },
-                                _ProjectHierarchy: ProjectOid,
-                                _ValidFrom: { $gte: minDate },
+this.myTrendChart = Ext.create('Rally.ui.chart.Chart', {
+    storeType: 'Rally.data.lookback.SnapshotStore',
+    storeConfig:  {
+        find: {
+            _TypeHierarchy: "Defect",
+            State: {$lt: "Closed" },
+            _ProjectHierarchy: ProjectOid,
+            _ValidFrom: { $gte: minDate },
                                  // pageSize: 200,
                                  // limit: 1000  
-                                limit: Infinity
-                            }, 
+                                 limit: Infinity
+                             }, 
 
-                            fetch: ["_ValidFrom", "_ValidTo", "ObjectID", field, 'Priority'],
-                            hydrate: [field, 'Priority'],
-                            sort: { "_ValidFrom" : 1}
-                        },      
-                        calculatorType: 'My.TrendCalc',
-                        calculatorConfig : {},
-                        chartConfig: {
+                             fetch: ["_ValidFrom", "_ValidTo", "ObjectID", field, 'Priority'],
+                             hydrate: [field, 'Priority'],
+                             sort: { "_ValidFrom" : 1}
+                         },      
+                         calculatorType: 'My.TrendCalc',
+                         calculatorConfig : {},
+                         chartConfig: {
                             chart: {
-                                    zoomType: 'xy',
-                                    type:'column'
+                                zoomType: 'xy',
+                                type:'column'
                             },
                             title: {
                                 text: 'Defects over Time'
@@ -144,15 +146,16 @@ Defect Trend App </title>
                         }
                     });
 
-                    return this.add(this.myTrendChart);
-                }
-            });
-    });
+return this.add(this.myTrendChart);
+}
+});
+});
 
-    console.log("launching application");
-    Rally.launchApp('CustomApp', {
-        name:'Defect Trend App',
-        parentRepos:""
-    });
-    </script>
+console.log("launching application");
+Rally.launchApp('CustomApp', {
+    name:'Defect Trend App',
+    parentRepos:""
+});
+</script>
 </head>
+</html>

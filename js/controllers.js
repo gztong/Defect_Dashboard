@@ -56,6 +56,8 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
   $scope.pool = {};
   $scope.loading = true;
 
+  $("[data-toggle=popover]").popover();
+  
   $scope.getLabelClass = function(tag){
   	var classes = ['label-primary', 'label-danger', 'label-success', 'label-info', 'label-warning'];
   	var i = hashCode(tag) % 5;
