@@ -8,21 +8,18 @@ body {
   color: $primary-color;
   #main{
   	width: 90%;
- 	margin: 0 auto;
+    margin: 0 auto;
   }
   .search{
   	width: 30%;
   	margin-left: 10px;
   	float: right;
   }
-
   .refresh{
   	width: 150px;
   	margin-left: 300px;
   	float: right;
   }
-
-
 }
 
 .toolBar{
@@ -55,26 +52,6 @@ body {
   color: black !important;
 }
 
-.mainTable {
-
-	thead {
-
-	}
-	.index {
-		color: red;
-	}
-
-
-	tr:nth-child(even){
-		background-color: $row-color;
-	}
-
-	td: {
-	    border: 2px solid black;
-
-	}
-
-}
 
 .hide{
 	display: none;
@@ -114,9 +91,3 @@ body {
   margin: auto;
   z-index: 100;
 }
-
-
-// .row{
-
-// 	background-color: 	background-color: $row-color;
-// }

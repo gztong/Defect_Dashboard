@@ -127,8 +127,7 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
   	}
   }
 
-
-  // loading defects
+  // Loading defects
   artifactsManager.loadAllArtifacts($scope.id, 100).then(
     function(result){
 
@@ -151,8 +150,6 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
             $scope.loading = false;
           });
     });
-
-
 
 
 
@@ -220,11 +217,8 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
        });
      }); 
 
-      
-
     }
-
-
+    
 });
 
 });

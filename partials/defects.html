@@ -24,9 +24,7 @@
     <img id="loading-image" src="./images/loading_spinner.gif"/>
   </div>
 
-
-  <!-- end nav bar -->
-
+<!-- end nav bar -->
 
   <div class="tabset">
 
@@ -43,6 +41,8 @@
 
         <tbody ng-repeat="(day, item) in groupDict">
           <tr colspan="4">
+            <th></th>
+            <th></th>
             <th> {{day}} </th>
           </tr>
           <tr ng-repeat="defect in item | filter: searchFilter" ng-class="{strike: defect.Gone}">
@@ -82,9 +82,11 @@
     <!--  end toolbar -->
     <div class="table-container">
       <table class="table table-hover">
-        <tbody ng-repeat="(key, item) in groupDict2">
+        <tbody ng-repeat="(day, item) in groupDict2">
           <tr colspan="4">
-            <th> {{key}} </th>
+            <th></th>
+            <th></th>
+            <th> {{day}} </th>
           </tr>
           <tr ng-repeat="defect in item | filter: searchFilter | filter: groupFilter" ng-class="{strike: defect.Gone}">
             <td class="index">{{$index + 1}}</td>
