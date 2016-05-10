@@ -1,38 +1,74 @@
-angular.module('DefectsApp.services', []).
-  factory('APIservice', function($http) {
+angular.module('DefectsApp.services', ['LocalStorageModule']).
+	config(function(localStorageServiceProvider){
+	  localStorageServiceProvider.setPrefix('demoPrefix');
+	  // localStorageServiceProvider.setStorageCookieDomain('example.com');
+	  // localStorageServiceProvider.setStorageType('sessionStorage');
+	}).
+  factory('APIservice', function($http, $cacheFactory, myCache, localStorageService) {
 
     var API = {};
+    // var server = 'https://rally1.rallydev.com/slm/webservice/v2.0/';
+    var server;
+    // var projectID = '6537932590';
+    var projectID;
 
-    API.getProjects = function(){
+    API.getProjectID = function(){
+    	projectID = localStorageService.get('projectID');
+    	return projectID;
+    }
+    API.getProjectName = function(){
+    	projectName = localStorageService.get('projectName');
+    	return projectName;
+    }
+    API.getServer = function(){
+		server = localStorageService.get('server');
+    	return (server)? server : false;
+    };
+
+    API.setProject = function(id, name){
+        localStorageService.set('projectID', id);
+        localStorageService.set('projectName', name);
+    }		
+
+    API.setServer = function(s){
+  		localStorageService.set('server', s);
+    }
+
+    API.getProjects = function(string){
       return $http({
         method: 'JSONP',
-        url: 'https://rally1.rallydev.com/slm/webservice/v2.0/projects?query=(Name contains "AIM")&pagesize=50&fetch=ObjectID&jsonp=JSON_CALLBACK'
+       // url: server+ 'projects?query=(Name contains "AIM")&pagesize=50&fetch=ObjectID&jsonp=JSON_CALLBACK',
+        url: server+ 'projects?query=(Name contains "'+string+'")&pagesize=200&fetch=ObjectID&order=LastUpdateDate&jsonp=JSON_CALLBACK',
+        cache: true
       });
     }
 
     API.getDefects = function(){
       return $http({
         method: 'JSONP',
-       // url: 'https://rally1.rallydev.com/slm/webservice/v2.0/defect?query=(((State = Open) and (Owner.Name = gangzheng.tong@ansys.com)) and (Severity <= %22Minor Problem%22))&order=Priority desc,Severity desc&fetch=true&stylesheet=/slm/doc/webservice/browser'
-        url: 'https://rally1.rallydev.com/slm/webservice/v2.0/defects?jsonp=JSON_CALLBACK'
+        cache: true,
+       // url: server+ 'defect?query=(((State = Open) and (Owner.Name = gangzheng.tong@ansys.com)) and (Severity <= %22Minor Problem%22))&order=Priority desc,Severity desc&fetch=true&stylesheet=/slm/doc/webservice/browser'
+        url: server+ 'defects?jsonp=JSON_CALLBACK'
       });
     }
 
-    API.tempData = function() {
+    API.tempData = function(server) {
       return $http.get('content.json');
     }
 
     API.getDefectsForId = function(id, pagesize) {
       return $http({
         method: 'JSONP', 
+        cache: true,
         // sample: https://rally1.rallydev.com/slm/webservice/v2.0/defects?query=(Project.ObjectID%20=%206537932590)&order=LastUpdateDate%20desc&pagesize=10&fetch=State,FormattedID,Owner,RevisionHistory
-        url: 'https://rally1.rallydev.com/slm/webservice/v2.0/defects?query=(Project.ObjectID = '+id+')&order=LastUpdateDate desc&pagesize='+pagesize+'&fetch=Tags,Priority,Severity,State,ObjectID,FormattedID,Owner,RevisionHistory&jsonp=JSON_CALLBACK'
+        url: server+ 'defects?query=(Project.ObjectID = '+id+')&order=LastUpdateDate desc&pagesize='+pagesize+'&fetch=Tags,Priority,Severity,State,ObjectID,FormattedID,Owner,RevisionHistory&jsonp=JSON_CALLBACK'
       });
     }
 
     API.getRevisions = function(ref){
     	return $http({
 			method: 'JSONP', 
+			cache: true,
      	    // Sample: https://rally1.rallydev.com/slm/webservice/v2.0/revisionhistory/425698796/revisions?jsonp=JSON_CALLBACK
   		    url: ref+'/revisions?pagesize=200&jsonp=JSON_CALLBACK'
    		 });
@@ -43,7 +79,8 @@ angular.module('DefectsApp.services', []).
     	return $http({
     		method: 'JSONP', 
     		// Sample: https://rally1.rallydev.com/slm/webservice/v2.0/Defect/47941087530/Tags
-       		url: ref+'?jsonp=JSON_CALLBACK'
+       		url: ref+'?jsonp=JSON_CALLBACK',
+			cache: true       		
   	    });
     }
 
@@ -192,3 +229,23 @@ angular.module('DefectsApp.services', []).
 
     return API;
   });
+
+
+
+
+// Set up the cache ‘myCache’
+angular.module('DefectsApp.services').
+	factory('myCache', function($cacheFactory) {
+		return $cacheFactory('cacheInfo');
+});
+
+// angular.module('DefectsApp.services').
+// 	factory('localStorageService', function($cacheFactory) {
+// 		return $cacheFactory('cacheInfo');
+// });
+
+
+
+
+
+

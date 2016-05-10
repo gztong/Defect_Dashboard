@@ -19,10 +19,10 @@ angular.module('DefectsApp')
 angular.module('DefectsApp')
 .factory('projectsManager',function projectsManager($http, $q, APIservice) {  
     var projectsManager = {
-        getProjects: function() {
+        getProjects: function(str) {
             var deferred = $q.defer();
             var scope = this;
-            APIservice.getProjects().
+            APIservice.getProjects(str).
                 success(function(response) {
                     var projects = [];
                     response.QueryResult.Results.forEach(function(data){

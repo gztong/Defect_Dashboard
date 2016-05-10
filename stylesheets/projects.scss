@@ -3,6 +3,21 @@ $primary-color: #334;
 $row-color: #CCC;
 $grey-text: #BBB;
 
+.config-container{
+  
+}
+
+.disabled {
+   pointer-events: none;
+   cursor: default;
+}
+
+.graph{
+	width: 100%;
+	height: 400px;
+  overflow: hidden;
+}
+
 body {
   font: 100% $font-stack;
   color: $primary-color;
@@ -12,25 +27,36 @@ body {
   }
   .search{
   	width: 30%;
-  	margin-left: 10px;
+  	margin-left: 70px;
   	float: right;
   }
   .refresh{
   	width: 150px;
-  	margin-left: 300px;
+  	margin-left: 360px;
   	float: right;
+  }
+  .config{
+    width: 30px;
+    margin-left: 10px;
+    float: right;
   }
 }
 
 .toolBar{
+	width: 100%;
+  height: 30px;
 	margin: 10px;
 	.orderButton{
 		display: inline;
 	}
 	.container-fluid{
-		float: left;
-  		width: 200px;
-		display: inline;
+	      float: left;
+     	  display: inline-block;
+     
+    .property-btn {
+			width: 150px;
+			color: black;
+    }
 	}
 	.option{
 
@@ -91,3 +117,11 @@ body {
   margin: auto;
   z-index: 100;
 }
+
+
+/* config page */
+.config-input{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+

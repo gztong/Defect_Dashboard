@@ -1,0 +1,38 @@
+<div  class="container config-container">
+      <h3>Configuration</h3>
+      <p>Set server and project. Enter partial project name and search for your project, and select one from the right side. <p>
+
+<div class="col-md-4 center-block">
+
+	<div class="input-group config-input">
+		<input type="text" class="form-control" placeholder="Server"  ng-model="serverName">
+		<div class="input-group-btn">
+			<button type="button" class="btn btn-default" ng-click="resetServer()">Reset</button>
+		</div>
+	</div>
+
+	<div class="input-group config-input">
+		<input type="text" class="form-control" placeholder="Project"  ng-model="projectName">
+		<div class="input-group-btn">
+			<button type="button" class="btn btn-default" ng-click="search()">Search</button>
+		</div>
+	</div>
+
+	<button type="button" class="btn btn-primary btn-block" ng-click="save()">Save and Go</button>
+	<button type="button" class="btn btn-default btn-block" ng-click="back()">Cancel</button>
+
+</div>
+
+<div class="col-md-8 center-block">
+	<div class="project-list">
+		<ul class="list-group">
+			<li class="list-group-item" ng-repeat="project in projectsList | filter: projectFilter" ng-click="selectProject(project)">
+				{{project._refObjectName}}
+				{{project.ObjectID}}
+			</li>
+		</ul>
+	</div>
+</div>
+
+
+</div>

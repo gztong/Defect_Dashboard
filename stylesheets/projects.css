@@ -1,3 +1,12 @@
+.disabled {
+  pointer-events: none;
+  cursor: default; }
+
+.graph {
+  width: 100%;
+  height: 400px;
+  overflow: hidden; }
+
 body {
   font: 100% 120%, Helvetica, sans-serif;
   color: #334; }
@@ -6,21 +15,29 @@ body {
     margin: 0 auto; }
   body .search {
     width: 30%;
-    margin-left: 10px;
+    margin-left: 70px;
     float: right; }
   body .refresh {
     width: 150px;
-    margin-left: 300px;
+    margin-left: 360px;
+    float: right; }
+  body .config {
+    width: 30px;
+    margin-left: 10px;
     float: right; }
 
 .toolBar {
+  width: 100%;
+  height: 30px;
   margin: 10px; }
   .toolBar .orderButton {
     display: inline; }
   .toolBar .container-fluid {
     float: left;
-    width: 200px;
-    display: inline; }
+    display: inline-block; }
+    .toolBar .container-fluid .property-btn {
+      width: 150px;
+      color: black; }
 
 .toggled {
   background-color: #0052cc !important;
@@ -33,13 +50,6 @@ body {
 .popoverStyle {
   text-decoration: none !important;
   color: black !important; }
-
-.mainTable {
-  td-border: 2px solid black; }
-  .mainTable .index {
-    color: red; }
-  .mainTable tr:nth-child(even) {
-    background-color: #CCC; }
 
 .hide {
   display: none; }
@@ -75,5 +85,10 @@ body {
 #loading-image {
   margin: auto;
   z-index: 100; }
+
+/* config page */
+.config-input {
+  margin-top: 10px;
+  margin-bottom: 10px; }
 
 /*# sourceMappingURL=projects.css.map */

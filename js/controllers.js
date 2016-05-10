@@ -1,26 +1,8 @@
 var controllers = angular.module('DefectsApp.controllers', []);
 
-controllers.controller('driversController', function($scope, APIservice) {
-    $scope.nameFilter = null;
-    $scope.driversList = [];
-}).
-
-/* Defects controller */
-controller('defectsController', function($scope, APIservice) {
-  $scope.defectsList = [];
-
-  $scope.searchFilter = function (defect) {
-       var keyword = new RegExp($scope.nameFilter, 'i');
-       return !$scope.nameFilter || keyword.test(defect.Name);
-    };
-  APIservice.getDefects($scope.id).success(function (response) {
-    $scope.defectsList = response.QueryResult.Results;
-  });
-
-}).
 
 /* Projects controller */
-controller('projectsController', function($scope, $http, APIservice, projectsManager) {
+controllers.controller('projectsController', function($scope, $http, APIservice, projectsManager) {
   $scope.projectsList = [];
   $scope.disable = false;
 
@@ -28,12 +10,21 @@ controller('projectsController', function($scope, $http, APIservice, projectsMan
     $scope.projectsList = result;
   });
 
-}).
+});
 
 /* Project controller */
-controller('projectController' , function($scope, $routeParams, APIservice, artifactsManager) {
-  // $('[data-toggle="tooltip"]').tooltip(); 
-  $scope.id = $routeParams.id;
+controllers.controller('projectController' , function($scope, $routeParams, $location, APIservice, artifactsManager) {
+
+  if(!APIservice.getServer || !APIservice.getProjectID()){
+      $location.path('/config');
+  }
+
+  //$scope.id = $routeParams.id;
+
+  $scope.id = APIservice.getProjectID();
+  $scope.projectName = APIservice.getProjectName();
+  console.log($scope.id)
+
   $scope.basicList = [];
   $scope.defectsList = []; 
   $scope.groupDict = {};
@@ -130,7 +121,6 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
   // Loading defects
   artifactsManager.loadAllArtifacts($scope.id, 100).then(
     function(result){
-
        $scope.basicList = artifactsManager.buildArtifacts(result);
      }).then(
     function(){
@@ -146,7 +136,8 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
             $scope.pool.property = APIservice.getPropertyPool($scope.defectsList);
 
             $scope.groupDict2 = APIservice.groupBy($scope.defectsList, 'State', $scope.pool.property);
-           // $('#loading').hide(); // Stop spinning loader
+          
+           // Stop spinning loader
             $scope.loading = false;
           });
     });
@@ -218,7 +209,25 @@ controller('projectController' , function($scope, $routeParams, APIservice, arti
      }); 
 
     }
+
+
+    $scope.$watch(APIservice.getServer, function (value, oldValue) {
+
+      if(!value && oldValue) {
+        console.log("Disconnect");
+        $location.path('/config');
+      }
+
+      if(value) {
+        console.log("Connect");
+        //Do something when the user is connected
+      }
+
+    }, true);
+
     
 });
 
 });
+
+
