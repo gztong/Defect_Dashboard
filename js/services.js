@@ -1,14 +1,12 @@
 angular.module('DefectsApp.services', ['LocalStorageModule']).
 	config(function(localStorageServiceProvider){
-	  localStorageServiceProvider.setPrefix('demoPrefix');
-	  // localStorageServiceProvider.setStorageCookieDomain('example.com');
-	  // localStorageServiceProvider.setStorageType('sessionStorage');
+	  localStorageServiceProvider.setPrefix('myCache');
 	}).
-  factory('APIservice', function($http, $cacheFactory, myCache, localStorageService) {
+  factory('APIservice', function($http, $cacheFactory, localStorageService) {
 
     var API = {};
-    // var server = 'https://rally1.rallydev.com/slm/webservice/v2.0/';
-    var server;
+    var default_server = 'https://rally1.rallydev.com/slm/webservice/v2.0/';
+    var server = default_server;
     // var projectID = '6537932590';
     var projectID;
 
@@ -22,7 +20,7 @@ angular.module('DefectsApp.services', ['LocalStorageModule']).
     }
     API.getServer = function(){
 		server = localStorageService.get('server');
-    	return (server)? server : false;
+    	return (server)? server : default_server;
     };
 
     API.setProject = function(id, name){
@@ -234,10 +232,10 @@ angular.module('DefectsApp.services', ['LocalStorageModule']).
 
 
 // Set up the cache ‘myCache’
-angular.module('DefectsApp.services').
-	factory('myCache', function($cacheFactory) {
-		return $cacheFactory('cacheInfo');
-});
+// angular.module('DefectsApp.services').
+// 	factory('myCache', function($cacheFactory) {
+// 		return $cacheFactory('cacheInfo');
+// });
 
 // angular.module('DefectsApp.services').
 // 	factory('localStorageService', function($cacheFactory) {

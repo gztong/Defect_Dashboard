@@ -46,9 +46,9 @@ controllers.controller('configController', function($scope, $location, APIservic
  	 };
 
      $scope.search = function(){
+        APIservice.setServer($scope.serverName);
         var string = $scope.projectName;
         if(!string) string =" ";
-        console.log(string);
         projectsManager.getProjects(string).then(function(result){
             $scope.projectsList = result;
         });
