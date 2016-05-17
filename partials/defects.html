@@ -50,6 +50,9 @@
         <p class="orderButton" ng-repeat = "(key, value) in orderToggled">
           <a class="btn btn-default" role="button" ng-click="toggle(key)" ng-class="{toggled : value}" >{{key}}</a>
         </p>
+
+        <a class="btn btn-default pull-right" role="button" ng-click="default_toggle()" ng-class="{toggled : true}" >defalut</a>
+
       </div>
 
       <table class="table table-hover">

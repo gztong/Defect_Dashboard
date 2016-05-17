@@ -36,7 +36,7 @@ angular.module('DefectsApp.services', ['LocalStorageModule']).
       return $http({
         method: 'JSONP',
        // url: server+ 'projects?query=(Name contains "AIM")&pagesize=50&fetch=ObjectID&jsonp=JSON_CALLBACK',
-        url: server+ 'projects?query=(Name contains "'+string+'")&pagesize=200&fetch=ObjectID&order=LastUpdateDate&jsonp=JSON_CALLBACK',
+        url: default_server+ 'projects?query=(Name contains "'+string+'")&pagesize=200&fetch=ObjectID&order=LastUpdateDate&jsonp=JSON_CALLBACK',
         cache: true
       });
     }
@@ -89,18 +89,26 @@ angular.module('DefectsApp.services', ['LocalStorageModule']).
     //   return obj3;
     // }
 
+	// result: the array that contains all the revisions for one defect,
+	// patt: regEx
+	// return the first revision that matches the regex
+	// otherwise return a dummy object indicating not found
     API.filterRevisions = function(results, patt){
-      for(var k = 0; k < results.length; k++){
-        if( patt.test(results[k].Description) ){
-          return results[k];
-       }
-     }
-     var notfound = {
+		var patt_original = new RegExp('^Original revision');
+
+		for(var k = 0; k < results.length; k++){
+        	if( patt.test(results[k].Description) || patt_original.test(results[k].Description)){
+         	 return results[k];
+			}
+     	}
+
+		var notfound = {
           Description: "Not Found",
           CreationDate: "1970-12-03T15:39:53.953Z"
-     }
-     return notfound;
-   }
+     	}
+     	return notfound;
+	};
+
    // arr1: all elements
    // arr2 : filtered elements
     API.mergeArrays = function(arr1, arr2){
@@ -227,23 +235,3 @@ angular.module('DefectsApp.services', ['LocalStorageModule']).
 
     return API;
   });
-
-
-
-
-// Set up the cache ‘myCache’
-// angular.module('DefectsApp.services').
-// 	factory('myCache', function($cacheFactory) {
-// 		return $cacheFactory('cacheInfo');
-// });
-
-// angular.module('DefectsApp.services').
-// 	factory('localStorageService', function($cacheFactory) {
-// 		return $cacheFactory('cacheInfo');
-// });
-
-
-
-
-
-

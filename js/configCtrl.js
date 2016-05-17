@@ -5,7 +5,9 @@ controllers.controller('configController', function($scope, $location, APIservic
      $scope.projectID = APIservice.getProjectID();
      $scope.projectName = APIservice.getProjectName();
 
-     // list all projects 
+     APIservice.setServer($scope.serverName);
+
+    // list all projects
      $scope.projectsList = []; 
      projectsManager.getProjects(" ").then(function(result){
         $scope.projectsList = result;
@@ -31,7 +33,7 @@ controllers.controller('configController', function($scope, $location, APIservic
 
  	 $scope.projectFilter = function(project){
 	  	var keyword = new RegExp($scope.projectName, 'i');
-	  	return ($scope.projectName === undefined) 
+	  	return (project === undefined)
 	  	|| keyword.test(project._refObjectName)
 	  	|| keyword.test(project.ObjectID);
  	 };
@@ -42,8 +44,10 @@ controllers.controller('configController', function($scope, $location, APIservic
  	 };
 
  	 $scope.resetServer = function(){
- 	 	$scope.serverName = APIservice.getServer();
- 	 };
+ 	 	 //$scope.serverName = APIservice.getServer();
+         APIservice.setServer($scope.serverName);
+
+     };
 
      $scope.search = function(){
         APIservice.setServer($scope.serverName);
