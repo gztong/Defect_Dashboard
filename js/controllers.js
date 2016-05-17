@@ -160,14 +160,11 @@ controllers.controller('projectController', function ($scope, $routeParams, $loc
             };
 
             $scope.default_toggle = function () {
-                // $scope.orderToggled['Owner'] = true;
-                // $scope.orderToggled['Package'] = true;
-                // $scope.orderToggled['Changeset'] = true;
-                // $scope.orderToggled['Resolution'] = true;
                 $scope.toggle('Owner');
                 $scope.toggle('Package');
                 $scope.toggle('Changeset');
                 $scope.toggle('Resolution');
+                $scope.default_toggled = !$scope.default_toggled;
             };
 
 
