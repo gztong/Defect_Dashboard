@@ -3,8 +3,8 @@ $primary-color: #334;
 $row-color: #CCC;
 $grey-text: #BBB;
 
-.config-container{
-  
+.header-content{
+  display: inline;
 }
 
 .disabled {
@@ -21,8 +21,13 @@ $grey-text: #BBB;
 body {
   font: 100% $font-stack;
   color: $primary-color;
-  #main{
+  #defect-main{
   	width: 90%;
+    margin: 0 auto;
+  }
+
+  #us-main{
+    width: 90%;
     margin: 0 auto;
   }
   .search{

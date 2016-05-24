@@ -30,7 +30,7 @@ angular.module('DefectsApp.services', ['LocalStorageModule']).
 
     API.setServer = function(s){
   		localStorageService.set('server', s);
-    }
+    };
 
     API.getProjects = function(string){
       return $http({
@@ -48,11 +48,32 @@ angular.module('DefectsApp.services', ['LocalStorageModule']).
        // url: server+ 'defect?query=(((State = Open) and (Owner.Name = gangzheng.tong@ansys.com)) and (Severity <= %22Minor Problem%22))&order=Priority desc,Severity desc&fetch=true&stylesheet=/slm/doc/webservice/browser'
         url: server+ 'defects?jsonp=JSON_CALLBACK'
       });
-    }
+    };
 
     API.tempData = function(server) {
-      return $http.get('content.json');
-    }
+      return $http.get('/temp/us-list.json');
+    };
+
+
+	API.getUSForId =  function(id, pagesize) {
+		return $http({
+			method: 'JSONP',
+			cache: true,
+
+			// https://rally1.rallydev.com/slm/webservice/v2.0/hierarchicalrequirement?query=(Project.ObjectID%20=%206537932590)&order=LastUpdateDate%20desc&pagesize=10&fetch=Tags,ScheduleState,ObjectID,FormattedID,Owner,TaskEstimateTotal,TaskRemainingTotal,TaskActualTotal
+			// url: server+ 'defect?query=(((State = Open) and (Owner.Name = gangzheng.tong@ansys.com)) and (Severity <= %22Minor Problem%22))&order=Priority desc,Severity desc&fetch=true&stylesheet=/slm/doc/webservice/browser'
+			url: server+ 'hierarchialrequiremnets?query=(Project.ObjectID = '+id+')&order=LastUpdateDate desc&pagesize='+pagesize+'&fetch=Tags,ScheduleState,ObjectID,FormattedID,Owner,TaskEstimateTotal,TaskRemainingTotal,TaskActualTotal&jsonp=JSON_CALLBACK'
+		});
+	};
+
+	API.getTasks = function (ref) {
+		return $http({
+			method: 'JSONP',
+			cache: true,
+			url: ref + '/tasks?jsonp=JSON_CALLBACK'
+		});
+	};
+
 
     API.getDefectsForId = function(id, pagesize) {
       return $http({

@@ -23,7 +23,6 @@ controllers.controller('projectController', function ($scope, $routeParams, $loc
 
     $scope.id = APIservice.getProjectID();
     $scope.projectName = APIservice.getProjectName();
-    console.log($scope.id)
 
     $scope.basicList = [];
     $scope.defectsList = [];

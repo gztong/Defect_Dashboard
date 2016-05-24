@@ -43,12 +43,11 @@ angular.module('DefectsApp')
 
 
 angular.module('DefectsApp.manager', [])
-.factory('artifactsManager',function artifactsManager ($http, $q, Artifact, APIservice) {  
+.factory('artifactsManager',function artifactsManager ($http, $q, Artifact, APIservice) {
     var manager = {
         /* Public Methods */
         loadAllArtifacts: function(id, pagesize) {
             var deferred = $q.defer();
-            var scope = this;
             APIservice.getDefectsForId(id, pagesize).
                 //APIservice.tempData().
 	            success(function(response) {
@@ -97,7 +96,6 @@ angular.module('DefectsApp.manager', [])
         },
 
         getRevisions: function (array) {
-            var count = 0;
             var apiList = [];
             window.apiList = apiList;
             var myPromise = $q.defer();
@@ -146,7 +144,6 @@ angular.module('DefectsApp.manager', [])
         		myPromise.resolve(array);
         		return myPromise.promise;
         	});
-
         },
 
         sortBy: function(pattStr, arr){
@@ -163,3 +160,83 @@ angular.module('DefectsApp.manager', [])
      
     return manager;
 });
+
+
+angular.module('DefectsApp.manager')
+    .factory('usManager',function usManager ($http, $q, Artifact, APIservice) {
+        var manager = {
+            loadUserStories: function (id, pagesize) {
+                var deferred = $q.defer();
+               // APIservice.getUSForId(id, pagesize).
+                    APIservice.tempData().  //DEBUG
+                    success(function(response) {
+                        var us_list = [];
+                        response.QueryResult.Results.forEach(function(data){
+                            var us = data;
+                            us.projectID = id;
+                            us_list.push(us);
+                        });
+                        deferred.resolve(us_list);
+                    })
+                    .error(function(){
+                        deferred.reject();
+                    });
+                return deferred.promise;
+            },
+
+            build_US_list: function(array) {
+                var us_list = [];
+
+                array.forEach(function (data) {
+                    //var id = data._ref.substr(data._ref.lastIndexOf('/') + 1); //48046560864
+                    var obj = {
+                        ref: data._ref,
+                        FormattedID: data.FormattedID,
+                        Name: data._refObjectName,
+                        //RevisionRef: data.RevisionHistory._ref,
+                        OwnerName: data.Owner ? data.Owner._refObjectName : 'No Owner',
+                        Tags: [],
+                        //https://rally1.rallydev.com/#/6537932590/detail/defect/48046560864
+                        Url: 'https://rally1.rallydev.com/#/' + data.projectID + '/detail/userstory/' + data.ObjectID,
+                        ScheduleState: data.ScheduleState,
+                        // Gone: data.ScheduleState==="Fixed/Resolved"|| data.ScheduleState==="Closed",
+                        TaskActualTotal: data.TaskActualTotal,
+                        TaskEstimateTotal: data.TaskEstimateTotal,
+                        TaskRemainingTotal: data.TaskRemainingTotal
+                    };
+                    us_list.push(obj);
+                });
+
+
+                return us_list;
+            },
+
+
+            getTasks: function(us_list){
+                // array: user story list
+                var myPromise = $q.defer();
+
+                return $q.all(us_list.map(function(item){
+                        return APIservice.getTasks(item.ref);
+                    }))
+                    .then(function(results){
+                        // results: task_lists of all user stories
+                        results.forEach(function(val, i){  // val: task_list of each user story
+                            var tasks = val.data.QueryResult.Results;
+                            us_list[i].tasks  = [];
+                            tasks.forEach(function(task){
+                                us_list[i].tasks.push(task);
+                            });
+                        });
+
+                        myPromise.resolve(us_list);
+                        return myPromise.promise;
+                    });
+            }
+
+
+        };
+
+        return manager;
+    });
+

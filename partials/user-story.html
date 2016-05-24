@@ -1,0 +1,57 @@
+<section id="us-main">
+
+
+    <div class="header">
+        <div class="header-content col-md-10">
+            <h3>{{projectName}} </h3>
+        </div>
+
+        <div class="user_story_btn col-md-2">
+            <a href="#/user-story">
+                <span class="btn btn-default"><span class="glyphicon glyphicon-user"></span></span>
+            </a>
+        </div>
+    </div>
+
+
+    <div class="us-container">
+
+        <div class="row" >
+            <div class="col-sm-6 col-md-4" ng-repeat="story in us_list">
+                <div class="thumbnail us-card">
+                    <img src="..." alt= "{{story.TaskRemainingTotal}}">
+                    <div class="caption">
+
+                        <h4>{{$index + 1}} {{story.FormattedID}}</h4>
+                        <p>{{story.Name}}</p>
+                        <p>{{story.TaskRemainingTotal}} , {{story.TaskEstimateTotal }} </p>
+                        <p> <a href="#" class="btn btn-primary" role="button">Tasks ({{story.tasks.length}})</a>
+                            <a href="#" class="btn btn-default" role="button">Button</a>
+                        </p>
+
+                        <p class="task-title" ng-repeat="task in story.tasks"> {{task._refObjectName}}</p>
+
+                    </div>
+
+                    <div class="task-container">
+                        <div class="task" ng-repeat="task in story.tasks">
+                            <p class="task-title"> {{task._refObjectName}}</p>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<div id="loading" ng-if="loading">
+    <img id="loading-image" src="./images/loading_spinner.gif"/>
+</div>

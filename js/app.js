@@ -14,6 +14,7 @@ defectsApp.config(function($routeProvider){
 		when("/projects", {templateUrl: "partials/projects.html", controller: "projectsController"}).
 		when("/defects/:id", {templateUrl: "partials/defects.html", controller: "projectController"}).
 		when("/config", {templateUrl: "partials/config.html", controller: "configController"}).
+        when("/user-story", {templateUrl: "partials/user-story.html", controller: "usController"}).
 		otherwise({redirectTo: '/defects'});
 
 });
