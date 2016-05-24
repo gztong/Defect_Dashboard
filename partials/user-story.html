@@ -24,19 +24,19 @@
 
                         <h4>{{$index + 1}} {{story.FormattedID}}</h4>
                         <p>{{story.Name}}</p>
-                        <p>{{story.TaskRemainingTotal}} , {{story.TaskEstimateTotal }} </p>
+                        <time-chart data="story"></time-chart>
                         <p> <a href="#" class="btn btn-primary" role="button">Tasks ({{story.tasks.length}})</a>
                             <a href="#" class="btn btn-default" role="button">Button</a>
                         </p>
 
-                        <p class="task-title" ng-repeat="task in story.tasks"> {{task._refObjectName}}</p>
+                        <!--<p class="task-title" ng-repeat="task in story.tasks"> {{task._refObjectName}}</p>-->
 
                     </div>
 
                     <div class="task-container">
-                        <div class="task" ng-repeat="task in story.tasks">
-                            <p class="task-title"> {{task._refObjectName}}</p>
-                        </div>
+                        <ul class="task" ng-repeat="task in story.tasks">
+                            <li class="task-title"> {{task._refObjectName}}</li>
+                        </ul>
                     </div>
                 </div>
 

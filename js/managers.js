@@ -163,28 +163,28 @@ angular.module('DefectsApp.manager', [])
 
 
 angular.module('DefectsApp.manager')
-    .factory('usManager',function usManager ($http, $q, Artifact, APIservice) {
+    .factory('usManager', function usManager($http, $q, Artifact, APIservice) {
         var manager = {
             loadUserStories: function (id, pagesize) {
                 var deferred = $q.defer();
-               // APIservice.getUSForId(id, pagesize).
-                    APIservice.tempData().  //DEBUG
-                    success(function(response) {
-                        var us_list = [];
-                        response.QueryResult.Results.forEach(function(data){
-                            var us = data;
-                            us.projectID = id;
-                            us_list.push(us);
-                        });
-                        deferred.resolve(us_list);
-                    })
-                    .error(function(){
-                        deferred.reject();
+                // APIservice.getUSForId(id, pagesize).
+                APIservice.tempData().  //DEBUG
+                success(function (response) {
+                    var us_list = [];
+                    response.QueryResult.Results.forEach(function (data) {
+                        var us = data;
+                        us.projectID = id;
+                        us_list.push(us);
                     });
+                    deferred.resolve(us_list);
+                })
+                .error(function () {
+                    deferred.reject();
+                });
                 return deferred.promise;
             },
 
-            build_US_list: function(array) {
+            build_US_list: function (array) {
                 var us_list = [];
 
                 array.forEach(function (data) {
@@ -212,19 +212,19 @@ angular.module('DefectsApp.manager')
             },
 
 
-            getTasks: function(us_list){
+            getTasks: function (us_list) {
                 // array: user story list
                 var myPromise = $q.defer();
 
-                return $q.all(us_list.map(function(item){
-                        return APIservice.getTasks(item.ref);
-                    }))
-                    .then(function(results){
+                return $q.all(us_list.map(function (item) {
+                    return APIservice.getTasks(item.ref);
+                }))
+                    .then(function (results) {
                         // results: task_lists of all user stories
-                        results.forEach(function(val, i){  // val: task_list of each user story
+                        results.forEach(function (val, i) {  // val: task_list of each user story
                             var tasks = val.data.QueryResult.Results;
-                            us_list[i].tasks  = [];
-                            tasks.forEach(function(task){
+                            us_list[i].tasks = [];
+                            tasks.forEach(function (task) {
                                 us_list[i].tasks.push(task);
                             });
                         });
@@ -238,5 +238,72 @@ angular.module('DefectsApp.manager')
         };
 
         return manager;
+    })
+    .directive('timeChart', function () {
+        return {
+            restrict: 'E',
+            template: '<div height="100px" width="100px"></div>',
+            scope: {
+                data: '='
+            },
+            link: function (scope, element) {
+                var percentComplete = Math.floor((scope.data.TaskEstimateTotal - scope.data.TaskRemainingTotal) / scope.data.TaskEstimateTotal * 100);
+                if (scope.data.TaskEstimateTotal != 0) 
+                    Highcharts.chart(element[0], {
+                        chart: {
+                            type: 'pie',
+                            width: 200,
+                            height: 150
+                        },
+                        title: {
+                            text: percentComplete + '% Completed',
+                            align: 'center',
+                            verticalAlign: 'top'
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: false,
+                                dataLabels: {
+                                    enabled: false,
+                                    format: '<b>{point.name}</b>: {point.x} hours'
+                                },
+                                size: '80%'
+                            }
+                        },
+                        series: [{
+                            allowPointSelect: false,
+                            innerSize: '60%',
+                            data: [
+                                ['Hours Completed', scope.data.TaskEstimateTotal - scope.data.TaskRemainingTotal],
+                                ['Hours Remaining', scope.data.TaskRemainingTotal]
+                            ]
+                        }]
+                    });
+                else Highcharts.chart(element[0], {
+                    chart: {
+                        type: 'pie',
+                        width: 200,
+                        height: 150
+                    },
+                    title: {
+                        text: 'No Tasks to Complete',
+                        align: 'center',
+                        verticalAlign: 'middle',
+                        y: -20
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: false,
+                            dataLabels: {
+                                enabled: false
+                                
+                            },
+                            size: '80%'
+                        }
+                    }
+
+                });
+            }
+        };
     });
 
