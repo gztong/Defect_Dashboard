@@ -250,15 +250,19 @@ angular.module('DefectsApp.manager')
                 var percentComplete = Math.floor((scope.data.TaskEstimateTotal - scope.data.TaskRemainingTotal) / scope.data.TaskEstimateTotal * 100);
                 if (scope.data.TaskEstimateTotal != 0) 
                     Highcharts.chart(element[0], {
+                        credits: {
+                            enabled: false
+                        },
                         chart: {
                             type: 'pie',
                             width: 200,
-                            height: 150
+                            height: 150,
+                            align: 'center',
                         },
                         title: {
-                            text: percentComplete + '% Completed',
+                            text: percentComplete + '%',
                             align: 'center',
-                            verticalAlign: 'top'
+                            verticalAlign: 'middle'
                         },
                         plotOptions: {
                             pie: {
@@ -271,8 +275,10 @@ angular.module('DefectsApp.manager')
                             }
                         },
                         series: [{
+                            name : " ",
+                            showInLegend: false,
                             allowPointSelect: false,
-                            innerSize: '60%',
+                            innerSize: '78%',
                             data: [
                                 ['Hours Completed', scope.data.TaskEstimateTotal - scope.data.TaskRemainingTotal],
                                 ['Hours Remaining', scope.data.TaskRemainingTotal]
@@ -296,10 +302,12 @@ angular.module('DefectsApp.manager')
                             allowPointSelect: false,
                             dataLabels: {
                                 enabled: false
-                                
                             },
                             size: '80%'
                         }
+                    },
+                    credits: {
+                        enabled: false
                     }
 
                 });
