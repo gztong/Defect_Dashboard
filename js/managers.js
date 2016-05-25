@@ -167,8 +167,8 @@ angular.module('DefectsApp.manager')
         var manager = {
             loadUserStories: function (id, pagesize) {
                 var deferred = $q.defer();
-                // APIservice.getUSForId(id, pagesize).
-                APIservice.tempData().  //DEBUG
+                 APIservice.getUSForId(id, pagesize).
+               // APIservice.tempData().  //DEBUG
                 success(function (response) {
                     var us_list = [];
                     response.QueryResult.Results.forEach(function (data) {
@@ -225,6 +225,9 @@ angular.module('DefectsApp.manager')
                             var tasks = val.data.QueryResult.Results;
                             us_list[i].tasks = [];
                             tasks.forEach(function (task) {
+                                // build task
+                                // https://rally1.rallydev.com/#/6537932590d/detail/task/55634483730
+                                task.Url = 'https://rally1.rallydev.com/#/' + APIservice.getProjectID() + '/detail/task/' + task.ObjectID;
                                 us_list[i].tasks.push(task);
                             });
                         });

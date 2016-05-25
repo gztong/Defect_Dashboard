@@ -25,9 +25,9 @@
     <!--End tool bar-->
 
 
-    <div class="us-container container">
+    <div class="us-container">
 
-        <div class="row" ng-repeat="story in us_list | filter: searchFilter">
+        <div class="row panel panel-default" ng-repeat="story in us_list | filter: searchFilter">
 
             <div class="col-md-2">
                 <div >
@@ -37,14 +37,18 @@
 
             <div class="col-md-8">
                 <div class="card card-block">
-                    <h4 class="card-title">{{$index + 1}}. {{story.FormattedID}}</h4>
+                    <a href={{story.Url}} target="_blank">
+                        <h4 class="card-title">{{$index + 1}}. {{story.FormattedID}}</h4>
+                    </a>
                     <p>{{story.Name}}</p>
                     <p> <button class="btn btn-primary"  ng-click="toggleClass($index)"> Tasks ({{story.tasks.length}})</button></p>
 
                 </div>
                 <div class="task-container" ng-if="isToggled[$index]">
                     <ul class="task" ng-repeat="task in story.tasks">
-                        <li class="task-title"> {{task._refObjectName}}</li>
+                        <a href={{task.Url}} target="_blank">
+                            <li class="task-title">{{task.FormattedID}} {{task._refObjectName}}</li>
+                        </a>
                     </ul>
                 </div>
             </div>

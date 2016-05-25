@@ -56,13 +56,14 @@ angular.module('DefectsApp.services', ['LocalStorageModule']).
 
 
 	API.getUSForId =  function(id, pagesize) {
+		pagesize = pagesize?10:pagesize;
 		return $http({
 			method: 'JSONP',
 			cache: true,
 
 			// https://rally1.rallydev.com/slm/webservice/v2.0/hierarchicalrequirement?query=(Project.ObjectID%20=%206537932590)&order=LastUpdateDate%20desc&pagesize=10&fetch=Tags,ScheduleState,ObjectID,FormattedID,Owner,TaskEstimateTotal,TaskRemainingTotal,TaskActualTotal
 			// url: server+ 'defect?query=(((State = Open) and (Owner.Name = gangzheng.tong@ansys.com)) and (Severity <= %22Minor Problem%22))&order=Priority desc,Severity desc&fetch=true&stylesheet=/slm/doc/webservice/browser'
-			url: server+ 'hierarchialrequiremnets?query=(Project.ObjectID = '+id+')&order=LastUpdateDate desc&pagesize='+pagesize+'&fetch=Tags,ScheduleState,ObjectID,FormattedID,Owner,TaskEstimateTotal,TaskRemainingTotal,TaskActualTotal&jsonp=JSON_CALLBACK'
+			url: default_server+ 'hierarchicalrequirement?query=(Project.ObjectID = '+id+')&order=LastUpdateDate desc&pagesize='+pagesize+'&fetch=Tags,ScheduleState,ObjectID,FormattedID,Owner,TaskEstimateTotal,TaskRemainingTotal,TaskActualTotal&jsonp=JSON_CALLBACK'
 		});
 	};
 

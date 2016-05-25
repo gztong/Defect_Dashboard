@@ -9,7 +9,8 @@ controllers.controller('usController', function($scope, $location, APIservice, u
     $scope.us_list = [];
     $scope.isToggled = [];
     $scope.nameFilter = {};
-
+    $scope.id = APIservice.getProjectID();
+    console.log($scope.id);
     $scope.searchFilter = function (us) {
         var keyword = new RegExp($scope.nameFilter.text, 'i');
         return ($scope.nameFilter.text === undefined)
