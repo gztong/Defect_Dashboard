@@ -7,6 +7,18 @@ controllers.controller('usController', function($scope, $location, APIservice, u
     $scope.projectName = APIservice.getProjectName();
     $scope.loading = true;
     $scope.us_list = [];
+    $scope.isToggled = [];
+    $scope.nameFilter = {};
+
+    $scope.searchFilter = function (us) {
+        var keyword = new RegExp($scope.nameFilter.text, 'i');
+        return ($scope.nameFilter.text === undefined)
+            || keyword.test(us.ScheduleState)
+            || keyword.test(us.Name)
+            || keyword.test(us.FormattedID)
+            || keyword.test(us.OwnerName);
+    };
+
 
 
     // Loading user stories
@@ -47,7 +59,11 @@ controllers.controller('usController', function($scope, $location, APIservice, u
             // Stop spinning loader
             $scope.loading = false;
         });
-    
+
+
+    $scope.toggleClass = function (id) {
+        $scope.isToggled[id] = ($scope.isToggled[id])?(!$scope.isToggled[id]):true;
+    };
     
 
 });

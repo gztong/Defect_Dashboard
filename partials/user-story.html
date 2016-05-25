@@ -15,31 +15,42 @@
         </div>
     </div>
 
-    <div class="us-container">
+    <div class="search">
+        <div class="input-group">
+            <input ng-model="nameFilter.text" type="text" class="form-control" placeholder="Search..." aria-describedby="basic-addon2"> </input>
+            <span class="input-group-addon" id="basic-addon2">Search</span>
+        </div>
+    </div>
 
-        <div class="row" >
-            <div class="col-sm-6 col-md-4" ng-repeat="story in us_list">
-                <div class="thumbnail us-card">
+    <!--End tool bar-->
 
-                    <div class="caption">
-                        <time-chart data="story" class="time-chart"></time-chart>
 
-                        <h4>{{$index + 1}} {{story.FormattedID}}</h4>
-                        <p>{{story.Name}}</p>
-                        <p> <a href="#" class="btn btn-primary" role="button">Tasks ({{story.tasks.length}})</a>
-                        </p>
+    <div class="us-container container">
 
-                    </div>
+        <div class="row" ng-repeat="story in us_list | filter: searchFilter">
 
-                    <div class="task-container">
-                        <ul class="task" ng-repeat="task in story.tasks">
-                            <li class="task-title"> {{task._refObjectName}}</li>
-                        </ul>
-                    </div>
+            <div class="col-md-2">
+                <div >
+                    <time-chart data="story" class="time-chart"></time-chart>
                 </div>
             </div>
-        </div>
 
+            <div class="col-md-8">
+                <div class="card card-block">
+                    <h4 class="card-title">{{$index + 1}}. {{story.FormattedID}}</h4>
+                    <p>{{story.Name}}</p>
+                    <p> <button class="btn btn-primary"  ng-click="toggleClass($index)"> Tasks ({{story.tasks.length}})</button></p>
+
+                </div>
+                <div class="task-container" ng-if="isToggled[$index]">
+                    <ul class="task" ng-repeat="task in story.tasks">
+                        <li class="task-title"> {{task._refObjectName}}</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-2"> </div>
+        </div>
     </div>
 
 </section>
