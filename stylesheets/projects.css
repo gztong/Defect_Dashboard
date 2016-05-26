@@ -27,10 +27,6 @@ body {
     width: 150px;
     margin-left: 360px;
     float: right; }
-  body .config {
-    width: 30px;
-    margin-left: 10px;
-    float: right; }
 
 .toolBar {
   width: 100%;

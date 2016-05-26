@@ -5,7 +5,7 @@
       <h3>
         {{projectName}}
         <a href="#/user-story">
-          <span class="btn btn-default"><span class="glyphicon glyphicon-user"></span></span>
+          <span class="btn btn-default">User Story <span class="glyphicon glyphicon-user"></span></span>
         </a>
 
         <a href="#/config">
@@ -22,13 +22,13 @@
     </div>
   </div>
 
+  <!-- Refresh button -->
   <div class="refresh">
     <div class="input-group">
       <input ng-model="pagesize" type="number" class="form-control" placeholder="1~200"> </input>
       <span class="input-group-addon btn btn-default" ng-click="refresh(pagesize)"><span class="glyphicon glyphicon-refresh"></span></span>
     </div>
   </div>
-  <!-- Refresh button -->
 
   <div id="loading" ng-if="loading">
     <img id="loading-image" src="./images/loading_spinner.gif"/>

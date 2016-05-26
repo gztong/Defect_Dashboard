@@ -56,7 +56,7 @@ angular.module('DefectsApp.services', ['LocalStorageModule']).
 
 
 	API.getUSForId =  function(id, pagesize) {
-		pagesize = pagesize?10:pagesize;
+		pagesize = pagesize?pagesize:10;
 		return $http({
 			method: 'JSONP',
 			cache: true,

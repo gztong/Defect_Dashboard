@@ -65,6 +65,24 @@ controllers.controller('usController', function($scope, $location, APIservice, u
     $scope.toggleClass = function (id) {
         $scope.isToggled[id] = ($scope.isToggled[id])?(!$scope.isToggled[id]):true;
     };
+
+
+    $scope.refresh = function (pagesize) {
+        console.log("refreshing...");
+        $scope.loading = true;
+        usManager.loadUserStories($scope.id, pagesize).then(
+            function (result) {
+                $scope.us_list = usManager.build_US_list(result);
+            }).then(
+            function () {
+                usManager.getTasks( $scope.us_list ).then(function (result) {
+                    $scope.us_list = result;
+                });
+                // Stop spinning loader
+                $scope.loading = false;
+            });
+
+    }
     
 
 });

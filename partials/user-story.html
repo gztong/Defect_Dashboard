@@ -5,7 +5,7 @@
             <h3>
                 {{projectName}}
                 <a href="#/defects">
-                    <span class="btn btn-default"><span class="glyphicon glyphicon-wrench"></span></span>
+                    <span class="btn btn-default">Defects <span class="glyphicon glyphicon-wrench"></span></span>
                 </a>
 
                 <a href="#/config">
@@ -15,10 +15,20 @@
         </div>
     </div>
 
+
+
     <div class="search">
         <div class="input-group">
             <input ng-model="nameFilter.text" type="text" class="form-control" placeholder="Search..." aria-describedby="basic-addon2"> </input>
             <span class="input-group-addon" id="basic-addon2">Search</span>
+        </div>
+    </div>
+
+    <!-- Refresh button -->
+    <div class="refresh">
+        <div class="input-group">
+            <input ng-model="pagesize" type="number" class="form-control" placeholder="1~200"> </input>
+            <span class="input-group-addon btn btn-default" ng-click="refresh(pagesize)"><span class="glyphicon glyphicon-refresh"></span></span>
         </div>
     </div>
 
@@ -46,6 +56,7 @@
                 </div>
                 <div class="task-container" ng-if="isToggled[$index]">
                     <ul class="task" ng-repeat="task in story.tasks">
+
                         <a href={{task.Url}} target="_blank">
                             <li class="task-title">{{task.FormattedID}} {{task._refObjectName}}</li>
                         </a>
